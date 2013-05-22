@@ -1,0 +1,53 @@
+<!-- Auflistung aller(!) Questions -->
+	<table class="table table-condensed">
+		<tr>
+ 			<th>Frage</th>
+ 			<th>Optionen (if any)</th>
+ 			<th>Aktionen</th>
+ 			<th>pos</th>
+ 		</tr>
+		
+		
+		<% @questions.each do |tq| %>
+				<tr id=<%= tq.position %>>
+		   			<td><%= tq.question %></td>
+		   			<td><% if tq.instance_of?(BoolQuestion) %>
+			   				<%= tq.option1 %> <br />
+			   				<%= tq.option2 %>
+		   				<% end %> 
+						
+						<% if tq.instance_of?(OptQuestion) && tq.options %>
+							<% tq.options.each_line do |l| %>
+								<%= l %> <br />
+							<% end %>
+						<% end %>
+		   			</td>
+		   			<td> edit | 	
+		   				<% if tq.instance_of?(TextQuestion) %>
+						<%= link_to 'destroy', 
+								user_event_text_question_path(@event.user_id, @event, tq), 
+								confirm: 'Sicher??!', 
+		    					method: :delete, 
+		    					:remote => :true 
+		    			%>
+		    			<% end %>
+		    			<% if tq.instance_of?(BoolQuestion) %>
+		    			<%= link_to 'destroy', 
+							user_event_bool_question_path(@event.user_id, @event, tq), 
+							confirm: 'Sicher??!', 
+	    					method: :delete, 
+	    					:remote => :true 
+	    				%>
+	    				<% end %>
+	    				<% if tq.instance_of?(OptQuestion) %>
+	    				<%= link_to 'destroy', 
+							user_event_opt_question_path(@event.user_id, @event, tq), 
+							confirm: 'Sicher??!', 
+	    					method: :delete, 
+	    					:remote => :true 
+	    				%>
+		    			<% end %></td>
+		    			<td><%= tq.position %></td>
+		   		</tr>
+		<% end %>
+	</table>

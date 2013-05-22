@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Loginsystem</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+
+	<div id="user_nav">
+  <% if session[:user_id] %>
+  	<div class="btn-toolbar pull-right">
+  		 <div class="btn-group">
+		    <%= link_to "Veranstaltungsübersicht", users_path, :class => "btn" %> 
+		 </div>
+		 <div class="btn-group"> 	
+		    <%= link_to "Profil bearbeiten", edit_user_path(session[:user_id]), :class => "btn" %>
+		    <% if session[:user_id] == 19 %>
+		    <%= link_to "User bearbeiten", admin_path, :class => "btn" %>
+		    <% end %>
+		 </div>
+		 <div class="btn-group">
+		 	<%= link_to "Logout", logout_path, :method => :delete, :class => "btn"%>
+		 </div>
+	</div>
+	
+	<!-- Test Dropdownmenue-->
+	
+	<div class="dropdown">
+		<a class="dropdown-toggle" href="#" data-toggle="dropdown" >
+			TEXT <b class="caret"></b></a>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+			<li><%= link_to "Logout", logout_path, :method => :delete, :class => "btn"%></li>
+			<li><%= link_to "Edit Profile", edit_user_path(session[:user_id]), :class => "btn" %></li>
+			<li><%= link_to "Eventlist", users_path, :class => "btn" %> </li>
+			<% if session[:user_id] == 19 %>
+		    	<li><%= link_to "Administrate Users", admin_path, :class => "btn" %></li>
+		    <% end %>
+		</ul>
+	</div>
+	
+	<!-- Test Dropdownmenue ende -->
+	
+  <% end %>
+	
+</div>
+
+
+	<%= yield %>
+
+
+
+</body>
+</html>

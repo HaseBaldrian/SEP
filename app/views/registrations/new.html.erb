@@ -1,0 +1,36 @@
+<h1>Anmeldung: <br /> 
+	<%= @event.title %></h1>
+
+<div><!-- Veranstaltungsdetails -->
+	<p>Veranstaltungsdetails: <br /> 
+		<%= @event.description%></p>
+</div>
+
+	<p id="notice"><%= notice %></p>
+
+<% if @event.expiry < Date.today  || @event.locked %>
+	<h1>Anmeldung leider bereits geschlossen!</h1>
+<% end %>
+
+<% if @event.registrations.count >= @event.max_registration_count && @event.max_registration_count > 0 %>
+	
+	<h2>Achtung!</h2>
+	<p>In dieser Veranstaltung sind bereits alle Plätze belegt. 
+		Wenn Sie sich anmelden, speichern wir Ihre Daten auf einer Warteliste. 
+		Sollten Sie nachrücken, informieren wir Sie. 		
+	</p>
+	
+	<!-- TODO wert für 'warteliste' setzen (?!) -->
+
+	<div id="form">
+		<%= render "form" %>
+	</div>
+<% end %>
+
+<% if (@event.expiry >= Date.today && !@event.locked)  && (@event.registrations.count < @event.max_registration_count || @event.max_registration_count < 0) %>
+
+	<div id="form">
+		<%= render "form" %>
+	</div>
+
+<% end %>

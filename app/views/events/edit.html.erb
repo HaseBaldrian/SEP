@@ -1,0 +1,12 @@
+<h1>Editing event</h1>
+
+<script type="text/javascript">
+	$(function(){
+		$.ajax({ url: '/events/<%= @event.id %>/edit', type: 'get', dataType: 'script'});
+	});
+</script>
+
+<%= render 'form' %>
+
+<% @user = @event.user_id %>
+<%= link_to 'Show', user_event_path(@user, @event) %> 

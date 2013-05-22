@@ -1,0 +1,97 @@
+<h1>Änderung der Anmeldung: <br /> 
+	<%= @event.title %></h1>
+
+<div><!-- Veranstaltungsdetails -->
+	<p>Veranstaltungsdetails: <br /> 
+		<%= @event.description%></p>
+</div>
+
+	<p id="notice"><%= notice %></p>
+
+<%= form_for([@user, @event, @registration]) do |f| %>
+  <% if @registration.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@registration.errors.count, "error") %> prohibited this registration from being saved:</h2>
+
+      <ul>
+      <% @registration.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.text_field :email %>
+  </div>
+  
+  
+
+  		<%= f.fields_for :text_question_regs do |tq_reg| %>	
+	  		<% q = TextQuestion.find_by_id(tq_reg.object.text_question_id) %>
+			<div class="field">
+				<%= tq_reg.label q.question %>
+				<%= tq_reg.text_field :input, :value => tq_reg.object.input %>
+		 	</div>
+		 	<!-- 
+		 	<div class="field">
+		 		<%= tq_reg.hidden_field :text_question_id, :value => q.id %>
+		 	</div> 
+		 	<div class="field">
+		 		<%= tq_reg.hidden_field :position, :value => q.position %>
+		 	</div> 
+		 	-->
+	 	 
+	 	 <% end %>
+	 	 
+	 	 <%= f.fields_for :bool_question_regs do |bq_reg| %>	
+	 	 	<% q = BoolQuestion.find_by_id(bq_reg.object.bool_question_id) %>
+			<div class="field">
+				<%= bq_reg.label q.question %> 
+				 
+				 <%= bq_reg.radio_button :input, q.option1, :checked => (q.option1 == bq_reg.object.input) %> 
+				 <%= bq_reg.label q.option1, :value => q.option1 %>
+				 <%= bq_reg.radio_button :input, q.option2, :checked => (q.option2 == bq_reg.object.input) %>
+				 <%= bq_reg.label q.option2, :value => q.option2 %>
+		 	 </div>
+	
+		 	<!--
+		 	<div class="field">
+		 		<%= bq_reg.hidden_field :bool_question_id, :value => q.id %>
+		 	</div>
+		 	<div class="field">
+		 		<%= bq_reg.hidden_field :position, :value => q.position %>
+		 	</div>
+		 	-->
+	 	<% end %> 
+	 	
+	 	<%= f.fields_for :opt_question_regs do |oq_reg| %>	
+		 	<% q = OptQuestion.find_by_id(oq_reg.object.opt_question_id) %>	
+		 	<% options = [] %>	
+		 	
+			<div class="field">
+				<%= oq_reg.label :input, q.question %> 
+				
+				<% q.options.each_line do |oq_reg_option| %>				
+					<% options << [oq_reg_option, oq_reg_option] %>
+				 <% end %>
+				 
+				 <%= oq_reg.select(:input, options, :selected => oq_reg.object.input) %>
+		 	 </div>
+		 	 
+		 	<!-- 
+		 	<div class="field">
+		 		<%= oq_reg.hidden_field :opt_question_id, :value => q.id %>
+		 	</div>	 
+		 	<div class="field">
+		 		<%= oq_reg.hidden_field :position, :value => q.position %>
+		 	</div> 	 
+		 	-->
+	 	<% end %>
+
+  
+  <div class="actions">
+    <%= f.submit "Änderungen speichern", :class => "btn btn-primary" %>
+  </div>
+<% end %>

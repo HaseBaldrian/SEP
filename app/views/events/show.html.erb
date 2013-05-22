@@ -1,0 +1,107 @@
+<div class="row-fluid">
+<div class="span6">
+
+	<p id="notice"><%= notice %></p>
+	
+		<dl class="dl-horizontal">
+		<dt>Titel:</dt>
+		<dd><%= @event.title %></dd>
+		<dt>Beschreibung</dt>
+		<dd><%= @event.description %></dd>
+		<dt>Anmeldelink:</dt>
+		<dd>http://localhost:3000/anmeldung/<%= @event.link %></dd>
+		<dt>Gesperrt:</dt>
+		<dd><% if @event.locked %>
+	    		ja
+	    	<% else %>
+	    		nein
+	    	<% end %></dd>
+		<dt>Anmeldungen:</dt>
+		<dd><%= @event.registrations.count %></dd>
+		<dt>Max. Teilnehmerzahl:</dt>
+		<dd><% if @event.max_registration_count == -1 %>
+	    		unbegrenzt
+	    	<% else %>
+	    		<%= @event.max_registration_count %>
+	    	<% end %></dd>
+		<dt>Anmeldeschluss:</dt>	
+		<dd><%= @event.expiry.strftime('%d.%m.%Y') %></dd>
+		<dt>Created by:</dt>
+		<dd><%= User.find(@event.user_id).name %></dd>
+	</dl>
+	
+	<%= link_to "Edit", edit_user_event_path(@user,@event) %> |
+	<%= link_to "Alle Anmeldungen", user_event_registrations_path(@user,@event)%>
+	
+	
+	<h2>Add a Textquestion:</h2>
+	<%= form_for([@user, @event, @event.text_questions.build], 
+			:url => user_event_text_questions_path(@user, @event), :remote => true) do |f| %>
+		
+		<div class="field">
+			<%= f.text_field :question %>
+		</div>
+		<div class="field">
+			<%= f.hidden_field :position, :value => @event.questions_count+1 %>
+		</div>
+		<div class="actions">
+			<%= f.submit :class => "btn", :remote => true %>
+		</div>
+		
+	<% end %>
+	
+	
+	<h2>Add a Boolquestion:</h2>
+	<%= form_for([@user, @event, @event.bool_questions.build], 
+			:url => user_event_bool_questions_path(@user, @event), :remote => true) do |f| %>
+		
+		<div class="field">
+			<%= f.label :question %>
+			<%= f.text_field :question %>
+		</div>
+		<div class="field">
+			<%= f.label :option1 %>
+			<%= f.text_field :option1 %> 
+		</div>
+		<div class="field">
+			<%= f.label :option2 %>
+			<%= f.text_field :option2 %>
+		</div>
+		<div class="field">
+			<%= f.hidden_field :position, :value => @event.questions_count+1 %>
+		</div>
+		<div class="actions">
+			<%= f.submit :class => "btn", :remote => true %>
+		</div>
+		
+	<% end %>
+
+	<h2>Add an Optquestion:</h2>
+	<%= form_for([@user, @event, @event.opt_questions.build], 
+			:url => user_event_opt_questions_path(@user, @event), :remote => true) do |f| %>
+		
+		<div class="field">
+			<%= f.label :question %>
+			<%= f.text_field :question %>
+		</div>
+		<div class="field">
+			<%= f.label :options %> 
+			<%= f.text_area :options %> 
+		</div>
+		<div class="field">
+			<%= f.hidden_field :position, :value => @event.questions_count+1 %>
+		</div>		
+		<div class="actions">
+			<%= f.submit :class => "btn", :remote => true %>
+		</div>
+		
+	<% end %>
+</div>
+<div class="span6">
+	<!-- Auflistung der Questions (tq_table rendert ALLE questions!) -->
+	
+	<div id="tq_table">
+		<%= render "text_questions/tq_table" %>
+	</div>
+	
+</div>

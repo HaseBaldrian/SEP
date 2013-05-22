@@ -1,0 +1,41 @@
+<%= form_for([@user, @event, @registration]) do |f| %>
+  <% if @registration.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@registration.errors.count, "error") %> prohibited this registration from being saved:</h2>
+
+      <ul>
+      <% @registration.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+      Please return and try again.
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.text_field :email %>
+  </div>
+  
+  
+  
+  	<%= f.fields_for :text_question_regs, @registration.questions do |tq_reg| %>	
+		<div class="field">
+			<%= tq_reg.label :input, tq_reg.object.text_question.question %>
+			<%= tq_reg.text_field :input %>
+	 	</div>
+	 	<div class="field">
+	 		<%= tq_reg.hidden_field :text_question_id, :value => tq_reg.object.text_question.id %>
+	 	</div> 
+	 	<div class="field">
+	 		<%= tq_reg.hidden_field :position, :value => tq_reg.object.text_question.position %>
+	 	</div> 
+	<% end %>
+ 
+  
+    
+  <div class="actions">
+    <%= f.submit :class => "btn btn-primary"%>
+  </div>
+
+<% end %>

@@ -1,0 +1,2 @@
+class OptQuestionRegsController < ApplicationController
+end

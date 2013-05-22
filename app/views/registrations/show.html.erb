@@ -1,0 +1,52 @@
+<div class="row-fluid">
+<div class="span2"></div>
+<div class="span10">
+	
+	<h1><%= @event.title %></h1>
+
+<div><!-- Veranstaltungsdetails -->
+	<p>Veranstaltungsdetails: <br /> 
+		<%= @event.description%></p>
+</div>
+
+	<p id="notice"><%= notice %></p>
+	
+	<h2>Ihre Anmeldedaten:</h2>
+	
+		<dl class="dl-horizontal">
+		<dt>Email:</dt>
+		<dd><%= @registration.email %></dd>
+		
+		<% @question_regs.each do |qr| %>
+		
+			<% if qr.instance_of?(TextQuestionReg) %>
+				
+				<dt><%= qr.text_question.question %></dt>
+				<dd><%= qr.input %></dd>
+			
+			<% end %>
+			<% if qr.instance_of?(BoolQuestionReg) %>
+				
+				<dt><%= qr.bool_question.question %></dt>
+				<dd><%= qr.input %></dd>
+				
+			<% end %>
+			<% if qr.instance_of?(OptQuestionReg) %>
+				
+				<dt><%= qr.opt_question.question %></dt>
+				<dd><%= qr.input %></dd>
+			
+			<% end %>
+			
+		
+		<% end %>
+		</dl>
+	
+	<%= link_to 'Angaben ändern', edit_user_event_registration_path(@user, @event, @registration), :class => "btn" %>
+	
+	<%= link_to 'Abmelden', user_event_registration_path(@user, @event, @registration), 
+							confirm: "Wollen Sie sich wirklich abmelden? \n\nACHTUNG: All Ihre Daten werden dabei gelöscht, bei Veranstaltungen mit beschränkter Teilnehmerzahl ist eine Neuanmeldung unter Umständen nicht möglich!", 
+	    					method: :delete,
+	    					:class => "btn" %>
+</div>
+</div>

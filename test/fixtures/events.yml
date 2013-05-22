@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  title: MyString
+  description: MyText
+  link: MyString
+  locked: false
+  registration_count: 1
+  max_registration_count: 1
+  expiry: 2013-05-10
+
+two:
+  title: MyString
+  description: MyText
+  link: MyString
+  locked: false
+  registration_count: 1
+  max_registration_count: 1
+  expiry: 2013-05-10

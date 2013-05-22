@@ -1,0 +1,21 @@
+<table class="table table-striped">
+	  <tr>
+	    <th>Email</th>
+	    <% @questions.each do |q| %>
+	    	<th><%= q.question %></th>
+	    <% end %>
+	  </tr>
+	
+	<% @registrations.each do |r| %>
+	  <tr>
+	  		<td> <%= r.email %></td> 
+	  		
+	  		<% @question_regs = r.text_question_regs.all + r.bool_question_regs.all + r.opt_question_regs.all %>
+	  		<% @question_regs = @question_regs.sort_by{ |q| q.position.to_i }%>
+	  		
+	  		<% @question_regs.each do |qr| %>
+	  			<td><%= qr.input %></td>
+	  		<% end %>
+	  </tr>
+	<% end %> 
+</table>

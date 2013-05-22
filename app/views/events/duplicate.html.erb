@@ -1,0 +1,96 @@
+<%= form_for([@user, @event], :url => user_events_path(@user)) do |f| %>
+  <% if @event.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@event.errors.count, "error") %> prohibited this event from being saved:</h2>
+
+      <ul>
+      <% @event.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+      Please go back and try again. Thanks.
+    </div>
+  <% else %>
+
+  <div class="field">
+    <%= f.label :title %><br />
+    <%= f.text_field :title, :value => @pattern.title %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_area :description, :value => @pattern.description %>
+  </div>
+  <div class="field">
+    <%= f.label :locked %><br />
+    <%= f.check_box :locked, :value => @pattern.locked %>
+  </div>
+  <div class="field">
+    <%= f.label :max_registration_count %><br />
+    <%= f.number_field :max_registration_count, :value => @pattern.max_registration_count %>
+  </div>
+  <div class="field">
+    <%= f.label :expiry %><br />
+    <%= f.date_select :expiry, :value => @pattern.expiry %>
+  </div>
+  
+  <!-- Questions -->
+  <% @pattern_questions.each do |q| %>
+  	
+  	<% if q.instance_of?(TextQuestion) %>
+  		
+  		<%= f.fields_for :text_questions do |tq| %>	
+			<div class="field">
+				<%= tq.label :question %>
+				<%= tq.text_field :question, :value => q.question %>
+			</div>
+			<div class="field">
+				<%= tq.label :position %>
+				<%= tq.text_field :position, :value => q.position %>
+			</div> 
+		<% end %>
+		 	 
+	<% elsif q.instance_of?(BoolQuestion) %>
+	 	 <%= f.fields_for :bool_questions do |bq| %>	
+			<div class="field">
+				<%= bq.label :question %>
+				<%= bq.text_field :question, :value => q.question %>
+		 	</div>
+		 	<div class="field">
+				<%= bq.label :option1 %>
+				<%= bq.text_field :option1, :value => q.option1 %>
+		 	</div>
+			<div class="field">
+				<%= bq.label :option2 %>
+				<%= bq.text_field :option2, :value => q.option2 %>
+		 	</div>
+		 	<div class="field">
+		 		<%= bq.label :position %>
+		 		<%= bq.text_field :position, :value => q.position %>
+		 	</div> 
+		<% end %> 	
+	
+	<% elsif q.instance_of?(OptQuestion) %>
+	 	 <%= f.fields_for :opt_questions do |oq| %>	
+		
+			<div class="field">
+				<%= oq.label :question %>
+				<%= oq.text_field :question, :value => q.question %>
+		 	</div>
+		 	<div class="field">
+				<%= oq.label :options %>
+				<%= oq.text_area :options, :value => q.options %>
+		 	</div>
+		 	<div class="field">
+		 		<%= oq.label :position %>
+		 		<%= oq.text_field :position, :value => q.position %>
+		 	</div> 
+		<% end %>	 	 
+	 	 
+	<% end %>
+  <% end %>
+  
+  <div class="actions">
+    <%= f.submit :class => "btn btn-primary"%>
+  </div>
+<% end %>
+<% end %>

@@ -1,0 +1,2 @@
+class BoolQuestionRegsController < ApplicationController
+end

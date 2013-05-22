@@ -1,0 +1,105 @@
+<% if session[:user_id] == 19 %>
+	<h2>Alle Veranstaltungen</h2>
+			
+		<% if notice %>
+			<p id="notice" ><%= notice %></p>
+		<% end %>
+		
+	<table class="table table-condensed">
+  <tr>
+    <th>Titel</th>
+    <th>Beschreibung</th>
+    <th>Link</th>
+    <th>Gesperrt</th>
+    <th>Anmeldungen</th>
+    <th>Max. Teilnehmerzahl</th>
+    <th>Anmeldeschluss</th>
+    <th>Erstellt von</th>
+    <th></th>
+  </tr>
+
+	<% @events.each do |event| %>
+	<% user = event.user_id %>
+	  <tr id=<%= event.id %>>
+		<td><%= event.title %></td>
+	    <td><%= event.description %></td>
+	    <td><%= event.link %></td>
+	    <td><% if event.locked %>
+	    		ja
+	    	<% else %>
+	    		nein
+	    	<% end %></td>
+	    <td><%= event.registrations.count %></td>
+	   	<td><% if event.max_registration_count == -1 %>
+	    		unbegrenzt
+	    	<% else %>
+	    		<%= event.max_registration_count %>
+	    	<% end %></td>
+	    <td><%= event.expiry.strftime('%d.%m.%Y') %></td>
+	    <td><%= User.find(user).name %></td>
+	    <td><%= link_to 'Show', user_event_path(user, event) %><br>
+	    	<%= link_to 'Edit', edit_user_event_path(user, event) %><br>
+	    	<%= link_to 'Destroy', user_event_path(user, event), confirm: 'Are you sure?', 
+	    								method: :delete, :remote => :true %></td>
+	  </tr>
+	<% end %>
+</table>	
+
+	<%= link_to 'New Event', new_user_event_path(session[:user_id]), :class => "btn" %>
+
+<% else if session[:user_id] %>
+	<h1>Deine Veranstaltungen</h1>
+	
+		<% if notice %>
+			<p id="notice" ><%= notice %></p>
+		<% end %>
+  
+  <table class="table table-condensed">
+  <tr>
+    <th>Titel</th>
+    <th>Beschreibung</th>
+    <th>Link</th>
+    <th>Gesperrt</th>
+    <th>Anmeldungen</th>
+    <th>Max. Teilnehmerzahl</th>
+    <th>Anmeldeschluss</th>
+    <th></th>
+  </tr>
+
+	<% @events.each do |event| %>
+	  <tr id=<%= event.id %>>
+	    <td><%= event.title %></td>
+	    <td><%= event.description %></td>
+	    <td><%= event.link %></td>
+	    <td><% if event.locked %>
+	    		ja
+	    	<% else %>
+	    		nein
+	    	<% end %></td>
+	    <td><%= event.registrations.count %></td>
+	   	<td><% if event.max_registration_count == -1 %>
+	    		unbegrenzt
+	    	<% else %>
+	    		<%= event.max_registration_count %>
+	    	<% end %></td>
+	    <td><%= event.expiry.strftime('%d.%m.%Y') %></td>
+	    <td><%= link_to 'Show', user_event_path(@user, event) %><br>
+	    	<%= link_to 'Edit', edit_user_event_path(@user, event) %><br>
+	    	<%= link_to 'Destroy', user_event_path(@user, event), confirm: 'Are you sure?', 
+	    								method: :delete, :remote => :true %></td>
+	  </tr>
+	<% end %>
+</table>
+	
+	<%= link_to 'New Event', new_user_event_path(@user), :class => "btn" %>
+	
+<% else %>
+	<% if notice %>
+		<p id="notice" ><%= notice %></p>
+	<% end %>
+
+	<h1>Information only for Jack Norris</h1>
+	<p> Please <%= link_to "Login", login_path %> to see more. </p>
+	
+<% end %>
+<% end %>
