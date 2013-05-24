@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  question: MyString
+  position: 1
+  event: 
+  as_relation_superclass: 
+
+two:
+  question: MyString
+  position: 1
+  event: 
+  as_relation_superclass: 

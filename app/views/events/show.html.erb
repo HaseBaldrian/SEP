@@ -35,14 +35,17 @@
 	
 	
 	<h2>Add a Textquestion:</h2>
-	<%= form_for([@user, @event, @event.text_questions.build], 
-			:url => user_event_text_questions_path(@user, @event), :remote => true) do |f| %>
+	<%= form_for([@user, @event, @event.questions.build], 
+			:url => user_event_questions_path(@user, @event), :remote => true) do |f| %>
 		
 		<div class="field">
 			<%= f.text_field :question %>
 		</div>
 		<div class="field">
 			<%= f.hidden_field :position, :value => @event.questions_count+1 %>
+		</div>
+		<div class="field">
+			<%= f.hidden_field :type, :value => "TextQuestion" %>
 		</div>
 		<div class="actions">
 			<%= f.submit :class => "btn", :remote => true %>
@@ -52,8 +55,8 @@
 	
 	
 	<h2>Add a Boolquestion:</h2>
-	<%= form_for([@user, @event, @event.bool_questions.build], 
-			:url => user_event_bool_questions_path(@user, @event), :remote => true) do |f| %>
+	<%= form_for([@user, @event, @event.questions.build], 
+			:url => user_event_questions_path(@user, @event), :remote => true) do |f| %>
 		
 		<div class="field">
 			<%= f.label :question %>
@@ -70,6 +73,9 @@
 		<div class="field">
 			<%= f.hidden_field :position, :value => @event.questions_count+1 %>
 		</div>
+		<div class="field">
+			<%= f.hidden_field :type, :value => "BoolQuestion" %>
+		</div>
 		<div class="actions">
 			<%= f.submit :class => "btn", :remote => true %>
 		</div>
@@ -77,8 +83,8 @@
 	<% end %>
 
 	<h2>Add an Optquestion:</h2>
-	<%= form_for([@user, @event, @event.opt_questions.build], 
-			:url => user_event_opt_questions_path(@user, @event), :remote => true) do |f| %>
+	<%= form_for([@user, @event, @event.questions.build], 
+			:url => user_event_questions_path(@user, @event), :remote => true) do |f| %>
 		
 		<div class="field">
 			<%= f.label :question %>
@@ -91,6 +97,9 @@
 		<div class="field">
 			<%= f.hidden_field :position, :value => @event.questions_count+1 %>
 		</div>		
+		<div class="field">
+			<%= f.hidden_field :type, :value => "OptQuestion" %>
+		</div>
 		<div class="actions">
 			<%= f.submit :class => "btn", :remote => true %>
 		</div>
@@ -101,7 +110,7 @@
 	<!-- Auflistung der Questions (tq_table rendert ALLE questions!) -->
 	
 	<div id="tq_table">
-		<%= render "text_questions/tq_table" %>
+		<%= render "questions/q_table" %>
 	</div>
 	
 </div>

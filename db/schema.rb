@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130522103408) do
+ActiveRecord::Schema.define(:version => 20130523101509) do
 
   create_table "bool_question_regs", :force => true do |t|
     t.string   "input"
@@ -25,16 +25,11 @@ ActiveRecord::Schema.define(:version => 20130522103408) do
   add_index "bool_question_regs", ["registration_id"], :name => "index_bool_question_regs_on_registration_id"
 
   create_table "bool_questions", :force => true do |t|
-    t.string   "question"
-    t.integer  "event_id"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.string   "option1"
     t.string   "option2"
-    t.integer  "position",   :limit => 255
   end
-
-  add_index "bool_questions", ["event_id"], :name => "index_bool_questions_on_event_id"
 
   create_table "events", :force => true do |t|
     t.string   "title"
@@ -64,15 +59,24 @@ ActiveRecord::Schema.define(:version => 20130522103408) do
   add_index "opt_question_regs", ["registration_id"], :name => "index_opt_question_regs_on_registration_id"
 
   create_table "opt_questions", :force => true do |t|
-    t.string   "question"
     t.string   "options"
-    t.integer  "position"
-    t.integer  "event_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
 
-  add_index "opt_questions", ["event_id"], :name => "index_opt_questions_on_event_id"
+  create_table "questions", :force => true do |t|
+    t.string   "question"
+    t.integer  "position"
+    t.integer  "event_id"
+    t.string   "option1"
+    t.string   "option2"
+    t.string   "options"
+    t.string   "type"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "questions", ["event_id"], :name => "index_questions_on_event_id"
 
   create_table "registrations", :force => true do |t|
     t.string   "email"
@@ -95,14 +99,9 @@ ActiveRecord::Schema.define(:version => 20130522103408) do
   add_index "text_question_regs", ["registration_id"], :name => "index_text_question_regs_on_registration_id"
 
   create_table "text_questions", :force => true do |t|
-    t.string   "question"
-    t.integer  "event_id"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
-    t.integer  "position",   :limit => 255
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
-
-  add_index "text_questions", ["event_id"], :name => "index_text_questions_on_event_id"
 
   create_table "users", :force => true do |t|
     t.string   "name"

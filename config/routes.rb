@@ -9,11 +9,14 @@ Loginsystem::Application.routes.draw do
   end
 
   resources :users do
-    resources :events do
-      resources :text_questions, :bool_questions, :opt_questions
+    resources :events do      
       resources :registrations
       get 'duplicate' => :duplicate
       post 'duplicate' => :create
+      
+      resources :questions do
+        resources :text_questions, :bool_questions, :opt_questions
+      end
     end
   end
   

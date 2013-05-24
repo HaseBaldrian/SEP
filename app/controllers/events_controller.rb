@@ -14,8 +14,9 @@ class EventsController < ApplicationController
   def show
     @user = User.find(params[:user_id])
     @event = Event.find(params[:id])
-    @questions = @event.text_questions + @event.bool_questions + @event.opt_questions || []
+    @questions = @event.questions 
     logger.info @questions.inspect
+    
     @event.update_attributes(:questions_count => @questions.count)
     
     @event.update_attribute(:locked, true) if @event.expiry < Date.today      

@@ -1,0 +1,38 @@
+<!-- Auflistung aller(!) Questions -->
+	<table class="table table-condensed">
+		<tr>
+ 			<th>Frage</th>
+ 			<th>Optionen (if any)</th>
+ 			<th>Aktionen</th>
+ 			<th>pos</th>
+ 			<th>id</th>
+ 		</tr>
+		
+		
+		<% @questions.each do |q| %>
+				<tr id=<%= q.id %>>
+		   			<td><%= q.question %></td>
+		   			<td><% if q.type == "BoolQuestion" %>
+			   				<%= q.option1 %> <br />
+			   				<%= q.option2 %>
+		   				<% end %> 
+						
+						<% if q.type == "OptQuestion"  %>
+							<% q.options.each_line do |l| %>
+								<%= l %> <br />
+							<% end %>
+						<% end %>
+		   			</td>
+		   			<td> edit | 	
+	    				<%= link_to 'destroy', 
+							user_event_question_path(@event.user_id, @event, q), 
+							confirm: 'Sicher??!', 
+	    					method: :delete, 
+	    					:remote => :true 
+	    				%>
+
+		    		<td><%= q.position %></td>
+		    		<td><%= q.id %></td>
+		   		</tr>
+		<% end %>
+	</table>
