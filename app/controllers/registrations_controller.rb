@@ -34,47 +34,28 @@ class RegistrationsController < ApplicationController
     @user = @event.user
     @questions = @event.questions.sort_by{ |q| q.position.to_i }
     
-    logger.info "params: " + params.inspect
-    
-    # answers und types aus params entfernen
-    if !params[:registration][:answers_attributes].blank? 
-      
-      # answers-attributes ablösen
-      answers_params = params[:registration].delete(:answers_attributes)
-      
-      # type-attribute der answers rauslösen
-
-      i=0
-      a_params = {}
-      type_params = {}
-      
-      answers_params.count.times do 
-        answer_i = answers_params.delete(i.to_s)
-        if !answer_i[:type].blank?
-          type_i = answer_i.delete(:type).constantize.to_s
-          type_params = type_params.merge(i.to_s => type_i)
-        end
-        a_params = a_params.merge(i.to_s => answer_i)
-        i+=1
-      end
-
-      answers_params = a_params
-      # answers_params: alle attribute ohne :type, {"0" => {...}, "1" => {...}, ...}
-      # type_params: alle antwort-typen, {"0" => {:type => TextAnswer}, "1" => {:type => ...}, ...}       
-    end
+    detached_params = detach_answers_and_types_params
+    answers_params = detached_params.delete('answers')
+    type_params = detached_params.delete('types')
         
     @registration = @event.registrations.create(params[:registration]) 
     
     # TODO opt_answers -> checkboxen
-    # TODO answer.create
-    
+
    
     
 
     respond_to do |format|
-      if true #@registration.save 
-        # @a = @registration.answers.create(params[:answer])   
-        # @a.type = model
+      if @registration.save 
+            
+        # create answers
+        i=0
+        answers_params.count.times do
+          answer_i = answers_params.delete(i.to_s)
+          @a = @registration.answers.create(answer_i)
+          @a.type = type_params.delete(i.to_s)
+          i+=1
+        end
         
         format.html { redirect_to user_event_registration_path(@user, @event, @registration), notice: 'Registration was successfully created.' }
         format.js #??
@@ -89,9 +70,9 @@ class RegistrationsController < ApplicationController
     @event = Event.find(params[:event_id])
     @registration = Registration.find(params[:id])
     
-    @question_regs = @registration.text_question_regs.all + @registration.bool_question_regs.all + @registration.opt_question_regs.all
-        # question_regs nach position sortieren
-    @question_regs = @question_regs.sort_by{ |q| q.position.to_i } 
+            # answers nach position sortieren
+    @answers = @registration.answers
+    @answers = @answers.sort_by{ |q| q.position.to_i } 
     
     respond_to do |format|
       format.html
@@ -131,13 +112,25 @@ class RegistrationsController < ApplicationController
     end
   end
   
-  def update
+def update
     @event = Event.find(params[:event_id])
     @user = User.find(params[:user_id])
     @registration = Registration.find(params[:id])
+    
+    detached_params = detach_answers_and_types_params
+    answers_params = detached_params.delete('answers')
 
     respond_to do |format|
       if @registration.update_attributes(params[:registration])
+
+        # update answers
+        i=0
+        @registration.sort_answers.each do |a|
+          answer_i = answers_params.delete(i.to_s)
+          a.update_attributes(answer_i)
+          i+=1
+        end
+        
         format.html { redirect_to user_event_registration_path(@user, @event, @registration), notice: 'Registration was successfully updated.' }
       else
         format.html { render action: "edit" }
@@ -153,6 +146,38 @@ class RegistrationsController < ApplicationController
     
     respond_to do |format|
       format.html { redirect_to new_user_event_registration_path(@user,@event), notice: 'Registration was successfully deleted.' }
+    end
+  end
+  
+  private
+  
+  # answers und types aus params entfernen
+  # answers_params: alle attribute ohne :type, {"0" => {...}, "1" => {...}, ...}
+  # type_params: alle antwort-typen, {"0" => {:type => TextAnswer}, "1" => {:type => ...}, ...}
+  # returns: {"answers" => ansers_params, "types" => type_params}       
+  def detach_answers_and_types_params
+    if !params[:registration][:answers_attributes].blank? 
+      
+      # answers-attributes ablösen
+      answers_params = params[:registration].delete(:answers_attributes)
+      
+      # type-attribute der answers rauslösen
+
+      i=0
+      a_params = {}
+      type_params = {}
+      
+      answers_params.count.times do 
+        answer_i = answers_params.delete(i.to_s)
+        if !answer_i[:type].blank?
+          type_i = answer_i.delete(:type).constantize.to_s
+          type_params.merge!(i.to_s => type_i)
+        end
+        a_params.merge!(i.to_s => answer_i)
+        i+=1
+      end
+
+      return {'answers' => a_params}.merge('types' => type_params)
     end
   end
 end

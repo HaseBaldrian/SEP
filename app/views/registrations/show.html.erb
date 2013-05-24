@@ -17,27 +17,10 @@
 		<dt>Email:</dt>
 		<dd><%= @registration.email %></dd>
 		
-		<% @question_regs.each do |qr| %>
-		
-			<% if qr.instance_of?(TextQuestionReg) %>
-				
-				<dt><%= qr.text_question.question %></dt>
-				<dd><%= qr.input %></dd>
+		<% @answers.each do |a| %>
 			
-			<% end %>
-			<% if qr.instance_of?(BoolQuestionReg) %>
-				
-				<dt><%= qr.bool_question.question %></dt>
-				<dd><%= qr.input %></dd>
-				
-			<% end %>
-			<% if qr.instance_of?(OptQuestionReg) %>
-				
-				<dt><%= qr.opt_question.question %></dt>
-				<dd><%= qr.input %></dd>
-			
-			<% end %>
-			
+			<dt><%= a.question.question %></dt>
+			<dd><%= a.input %></dd>	
 		
 		<% end %>
 		</dl>
