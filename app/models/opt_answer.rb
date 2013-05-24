@@ -1,0 +1,2 @@
+class OptAnswer < Answer
+end

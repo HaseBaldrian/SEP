@@ -11,7 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130523101509) do
+ActiveRecord::Schema.define(:version => 20130524093241) do
+
+  create_table "answers", :force => true do |t|
+    t.string   "input"
+    t.integer  "registration_id"
+    t.integer  "question_id"
+    t.string   "type"
+    t.integer  "position"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "answers", ["question_id"], :name => "index_answers_on_question_id"
+  add_index "answers", ["registration_id"], :name => "index_answers_on_registration_id"
 
   create_table "bool_question_regs", :force => true do |t|
     t.string   "input"

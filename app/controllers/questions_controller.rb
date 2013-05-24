@@ -4,29 +4,16 @@ class QuestionsController < ApplicationController
     @event = Event.find(params[:event_id])
     @user = @event.user_id
     
-    # setup protected attributes
-    # evtl in eigene methode umziehen "private def setup_sti"
+    # setup model-type
+    # evtl in eigene methode umziehen "private def setup_sti_type"
     model = nil
-    opt1 = nil
-    opt2 = nil
-    opts = nil
     if !params[:question].blank? && !params[:question][:type].blank?
       model = params[:question].delete(:type).constantize.to_s
     end
-    if !params[:question].blank? && (!params[:question][:option1].blank? || !params[:question][:option2].blank?)
-      opt1 = params[:question].delete(:option1).to_s
-      opt2 = params[:question].delete(:option2).to_s
-    end
-    if !params[:question].blank? && !params[:question][:options].blank?
-      opts = params[:question].delete(:options).to_s
-    end
-    
+   
     #create question (u.U. mit neuen Parametern)
     @q = @event.questions.create(params[:question])   
     @q.type = model
-    @q.option1 = opt1
-    @q.option2 = opt2
-    @q.options = opts
 
     @questions = @event.questions
    # logger.info "loggerinfo: "+@questions.inspect

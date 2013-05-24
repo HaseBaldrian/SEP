@@ -14,17 +14,14 @@ class RegistrationsController < ApplicationController
     
     @user = @event.user
     #TODO was, wenn link unbekannt?
-    @questions = @event.text_questions.all + @event.bool_questions.all + @event.opt_questions.all
-
+    @questions = @event.questions
+    
     # questions nach position sortieren
     @questions = @questions.sort_by{ |q| q.position.to_i } 
 
-    @event.text_questions.each do |tq|
-      @registration.text_question_regs.new({:text_question => tq, :position => tq.position})
-    end 
-      # TODO  @bq_reg = @registration.bool_question_regs.build
-      # @oq_reg = @registration.opt_question_regs.build
-      
+    @event.questions.each do |q|
+        @registration.answers.build(:question_id => q, :position => q.position, :registration_id => @registration)
+    end
     
     respond_to do |format|
       format.html # new.html.erb
@@ -35,10 +32,9 @@ class RegistrationsController < ApplicationController
     
     @event = Event.find(params[:event_id])# bzw. find by link, s.o.
     @user = @event.user
-    @questions = @event.text_questions.all + @event.bool_questions.all + @event.opt_questions.all
+    @questions = @event.questions.sort_by{ |q| q.position.to_i }
     
-    # questions nach position sortieren
-    @questions = @questions.sort_by{ |q| q.position.to_i } 
+    # TODO evtl. params umarbeiten wg. checkboxen
 
     @registration = @event.registrations.create(params[:registration]) 
 
@@ -69,9 +65,10 @@ class RegistrationsController < ApplicationController
   def index
     @user = User.find(params[:user_id])
     @event = Event.find(params[:event_id])
-    @registrations = @event.registrations.all #TODO sort by something? aktuell id
+    @registrations = @event.registrations.find(:all, :order => 'created_at') 
+        #TODO sort by something? aktuell erstellungsdatum
     
-    @questions = @event.text_questions.all + @event.bool_questions.all + @event.opt_questions.all
+    @questions = @event.questions
       #questions nach position sortieren    
     @questions = @questions.sort_by{ |q| q.position.to_i } 
     

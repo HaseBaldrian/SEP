@@ -1,0 +1,2 @@
+class BoolAnswer < Answer
+end

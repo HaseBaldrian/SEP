@@ -19,16 +19,41 @@
   
   
   
-  	<%= f.fields_for :text_question_regs, @registration.questions do |tq_reg| %>	
-		<div class="field">
-			<%= tq_reg.label :input, tq_reg.object.text_question.question %>
-			<%= tq_reg.text_field :input %>
-	 	</div>
+  	<%= f.fields_for :answers, @registration.answers do |a| %>	
+		
+		<% q = a.object.question %>
+		
+		<% if a.object.question.type == "TextQuestion" %>
+			<div class="field">
+				<%= a.label :input, q.question %>
+				<%= a.text_field :input %>
+		 	</div>
+		 	<div class="field">
+		 		<%= a.hidden_field :type, :value => "TextAnswer" %>
+		 	</div> 
+		 	
+		<% elsif a.object.question.type == "BoolQuestion" %>
+			<div class="field">
+				<%= a.label :input, q.question %> 
+				 
+				<%= a.radio_button :input, q.option1, :checked => true %> 
+				<%= a.label q.option1, :value => q.option1 %>
+				<%= a.radio_button :input, q.option2 %>
+				<%= a.label q.option2, :value => q.option2 %>
+	 		 </div>		
+	 		 <div class="field">
+		 		<%= a.hidden_field :type, :value => "BoolAnswer" %>
+		 	</div> 
+		 	
+	 	 <% elsif %>
+			Checkboxen
+		<% end %>
+		
 	 	<div class="field">
-	 		<%= tq_reg.hidden_field :text_question_id, :value => tq_reg.object.text_question.id %>
+	 		<%= a.hidden_field :question_id, :value => a.object.question.id %>
 	 	</div> 
 	 	<div class="field">
-	 		<%= tq_reg.hidden_field :position, :value => tq_reg.object.text_question.position %>
+	 		<%= a.hidden_field :position, :value => a.object.question.position %>
 	 	</div> 
 	<% end %>
  
