@@ -22,8 +22,9 @@
   	<%= f.fields_for :answers, @registration.answers do |a| %>	
 		
 		<% q = a.object.question %>
+		<% logger.info q.inspect %>
 		
-		<% if a.object.question.type == "TextQuestion" %>
+		<% if q.type == "TextQuestion" %>
 			<div class="field">
 				<%= a.label :input, q.question %>
 				<%= a.text_field :input %>
@@ -32,7 +33,7 @@
 		 		<%= a.hidden_field :type, :value => "TextAnswer" %>
 		 	</div> 
 		 	
-		<% elsif a.object.question.type == "BoolQuestion" %>
+		<% elsif q.type == "BoolQuestion" %>
 			<div class="field">
 				<%= a.label :input, q.question %> 
 				 

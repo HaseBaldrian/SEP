@@ -20,7 +20,7 @@ class RegistrationsController < ApplicationController
     @questions = @questions.sort_by{ |q| q.position.to_i } 
 
     @event.questions.each do |q|
-        @registration.answers.build(:question_id => q, :position => q.position, :registration_id => @registration)
+        @a = @registration.answers.build(:question_id => q.id, :position => q.position, :registration_id => @registration)
     end
     
     respond_to do |format|
@@ -34,12 +34,48 @@ class RegistrationsController < ApplicationController
     @user = @event.user
     @questions = @event.questions.sort_by{ |q| q.position.to_i }
     
-    # TODO evtl. params umarbeiten wg. checkboxen
+    logger.info "params: " + params.inspect
+    
+    # answers und types aus params entfernen
+    if !params[:registration][:answers_attributes].blank? 
+      
+      # answers-attributes ablösen
+      answers_params = params[:registration].delete(:answers_attributes)
+      
+      # type-attribute der answers rauslösen
 
+      i=0
+      a_params = {}
+      type_params = {}
+      
+      answers_params.count.times do 
+        answer_i = answers_params.delete(i.to_s)
+        if !answer_i[:type].blank?
+          type_i = answer_i.delete(:type).constantize.to_s
+          type_params = type_params.merge(i.to_s => type_i)
+        end
+        a_params = a_params.merge(i.to_s => answer_i)
+        i+=1
+      end
+
+      answers_params = a_params
+      # answers_params: alle attribute ohne :type, {"0" => {...}, "1" => {...}, ...}
+      # type_params: alle antwort-typen, {"0" => {:type => TextAnswer}, "1" => {:type => ...}, ...}       
+    end
+        
     @registration = @event.registrations.create(params[:registration]) 
+    
+    # TODO opt_answers -> checkboxen
+    # TODO answer.create
+    
+   
+    
 
     respond_to do |format|
-      if @registration.save 
+      if true #@registration.save 
+        # @a = @registration.answers.create(params[:answer])   
+        # @a.type = model
+        
         format.html { redirect_to user_event_registration_path(@user, @event, @registration), notice: 'Registration was successfully created.' }
         format.js #??
       else
