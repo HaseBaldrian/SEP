@@ -12,19 +12,24 @@ class RegistrationsController < ApplicationController
       @event = Event.find(params[:event_id]) 
     end
     
-    @user = @event.user
-    #TODO was, wenn link unbekannt?
-    @questions = @event.questions
-    
-    # questions nach position sortieren
-    @questions = @questions.sort_by{ |q| q.position.to_i } 
-
-    @questions.each do |q|
-        @a = @registration.answers.build(:question_id => q.id, :position => q.position)
+    if @event 
+      @user = @event.user
+      @questions = @event.questions
+      
+      # questions nach position sortieren
+      @questions = @questions.sort_by{ |q| q.position.to_i } 
+  
+      @questions.each do |q|
+          @a = @registration.answers.build(:question_id => q.id, :position => q.position)
+      end
     end
     
     respond_to do |format|
-      format.html # new.html.erb
+      unless @event
+        format.html { render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found }
+      else 
+        format.html # new.html.erb
+      end
     end
   end
   
