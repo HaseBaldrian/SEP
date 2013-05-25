@@ -31,7 +31,9 @@
 	</dl>
 	
 	<%= link_to "Edit", edit_user_event_path(@user,@event) %> |
-	<%= link_to "Alle Anmeldungen", user_event_registrations_path(@user,@event)%>
+	<%= link_to "Veranstaltung duplizieren", user_event_duplicate_path(@user,@event) %> |
+	<%= link_to "Alle Anmeldungen", user_event_registrations_path(@user,@event) %> 
+	
 	
 	
 	<h2>Add a Textquestion:</h2>

@@ -39,6 +39,7 @@
 	    <td><%= User.find(user).name %></td>
 	    <td><%= link_to 'Show', user_event_path(user, event) %><br>
 	    	<%= link_to 'Edit', edit_user_event_path(user, event) %><br>
+	    	<%= link_to "Copy", user_event_duplicate_path(user,event) %><br>
 	    	<%= link_to 'Destroy', user_event_path(user, event), confirm: 'Are you sure?', 
 	    								method: :delete, :remote => :true %></td>
 	  </tr>
