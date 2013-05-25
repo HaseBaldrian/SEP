@@ -20,18 +20,18 @@ class Registration < ActiveRecord::Base
   end
   
   def self.to_csv registrations
-    firstline = ["EMAIL"]
+    firstline = ["\'EMAIL\'"]
       registrations.first.answers.each do |answer|
-        firstline << answer.question.question.upcase
+        firstline << "\'" + answer.question.question.upcase + "\'"
       end
     
     CSV.generate do |csv|
       csv << firstline
       registrations.each do |registration|
-        inputs = [registration.email]
+        inputs = ["\'" + registration.email+ "\'"]
         answers = registration.answers
         answers.each do |answer|
-          inputs << answer.input
+          inputs << "\'" + answer.input+ "\'"
         end        
         csv << inputs
       end 
