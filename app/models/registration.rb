@@ -4,6 +4,8 @@ class Registration < ActiveRecord::Base
   
   accepts_nested_attributes_for :answers, :allow_destroy => true
   
+  before_validation :downcase_email
+  
   EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i
   validates :email, :presence => true, :format => EMAIL_REGEX, 
             :uniqueness => { :scope => :event_id } 
@@ -11,5 +13,9 @@ class Registration < ActiveRecord::Base
   def sort_answers
     answers = self.answers
     return answers.sort_by{ |a| a.position.to_i }
+  end
+  
+  def downcase_email
+    self.email.downcase!
   end
 end

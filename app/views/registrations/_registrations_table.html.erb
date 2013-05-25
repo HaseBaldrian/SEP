@@ -1,13 +1,14 @@
 <table class="table table-striped">
 	  <tr>
-	    <th>Email</th>
+	    	<th>Email</th>
 	    <% @questions.each do |q| %>
 	    	<th><%= q.question %></th>
 	    <% end %>
+	    	<th></th>
 	  </tr>
 	
 	<% @registrations.each do |r| %>
-	  <tr>
+	  <tr id=<%= r.id %>>
 	  		<td> <%= r.email %></td> 
 	  		
 	  		<% @answers = r.answers.all %>
@@ -16,6 +17,10 @@
 	  		<% @answers.each do |a| %>
 	  			<td><%= a.input %></td>
 	  		<% end %>
+	  		<td><%= link_to 'Anmeldung löschen', user_event_registration_path(r.event.user, r.event, r), 
+							confirm: "Anmeldung wirklich löschen? \nACHTUNG: Alle Daten sind dann weg!", 
+							method: :delete, remote: true,
+	    					:class => "btn"%></td>
 	  </tr>
 	<% end %> 
 </table>

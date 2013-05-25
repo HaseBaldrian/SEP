@@ -142,10 +142,16 @@ def update
     @event = Event.find(params[:event_id])
     @user = User.find(params[:user_id])
     @registration = Registration.find(params[:id])
+    @id = @registration.id
     @registration.destroy
     
     respond_to do |format|
-      format.html { redirect_to new_user_event_registration_path(@user,@event), notice: 'Registration was successfully deleted.' }
+      unless session[:user_id] 
+        format.html { redirect_to new_user_event_registration_path(@user,@event), notice: 'Registration was successfully deleted.' } 
+      else
+        format.html { redirect_to user_event_registrations_path(@user,@event) }
+        format.js 
+      end
     end
   end
   
