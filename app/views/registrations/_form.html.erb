@@ -8,7 +8,6 @@
         <li><%= msg %></li>
       <% end %>
       </ul>
-      Please return and try again.
     </div>
   <% end %>
 
@@ -22,7 +21,6 @@
   	<%= f.fields_for :answers, @registration.answers do |a| %>	
 		
 		<% q = a.object.question %>
-		<% logger.info q.inspect %>
 		
 		<% if q.type == "TextQuestion" %>
 			<div class="field">

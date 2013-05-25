@@ -19,8 +19,8 @@ class RegistrationsController < ApplicationController
     # questions nach position sortieren
     @questions = @questions.sort_by{ |q| q.position.to_i } 
 
-    @event.questions.each do |q|
-        @a = @registration.answers.build(:question_id => q.id, :position => q.position, :registration_id => @registration)
+    @questions.each do |q|
+        @a = @registration.answers.build(:question_id => q.id, :position => q.position)
     end
     
     respond_to do |format|
@@ -37,8 +37,22 @@ class RegistrationsController < ApplicationController
     detached_params = detach_answers_and_types_params
     answers_params = detached_params.delete('answers')
     type_params = detached_params.delete('types')
-        
+    
+    # detach_params wieder zu registration_params dazu
+    if answers_params
+      params[:registration] = params[:registration].merge("answers_attributes" => answers_params)
+    end 
+    
     @registration = @event.registrations.create(params[:registration]) 
+    
+    answers =  @registration.answers 
+    i=0
+    answers.each do |a|
+      a.type = type_params.delete(i.to_s)
+      i+=1
+    end 
+        
+    
     
     # TODO opt_answers -> checkboxen
 
@@ -46,17 +60,7 @@ class RegistrationsController < ApplicationController
     
 
     respond_to do |format|
-      if @registration.save 
-            
-        # create answers
-        i=0
-        answers_params.count.times do
-          answer_i = answers_params.delete(i.to_s)
-          @a = @registration.answers.create(answer_i)
-          @a.type = type_params.delete(i.to_s)
-          i+=1
-        end
-        
+      if @registration.save   
         format.html { redirect_to user_event_registration_path(@user, @event, @registration), notice: 'Registration was successfully created.' }
         format.js #??
       else
@@ -98,14 +102,6 @@ class RegistrationsController < ApplicationController
     @user = User.find(params[:user_id])
     @event = Event.find(params[:event_id])
     @registration = Registration.find(params[:id])
-    
-   # @questions = @event.text_questions.all + @event.bool_questions.all + @event.opt_questions.all
-      #questions nach position sortieren    
-    #@questions = @questions.sort_by{ |q| q.position.to_i } 
-    
-    # @question_regs = @registration.text_question_regs.all + @registration.bool_question_regs.all + @registration.opt_question_regs.all
-        # # question_regs nach position sortieren
-    # @question_regs = @question_regs.sort_by{ |q| q.position.to_i } 
        
     respond_to do |format|
       format.html
@@ -119,18 +115,14 @@ def update
     
     detached_params = detach_answers_and_types_params
     answers_params = detached_params.delete('answers')
+    
+    # detach_params wieder zu registration_params dazu
+    if answers_params
+      params[:registration] = params[:registration].merge("answers_attributes" => answers_params)
+    end 
 
     respond_to do |format|
-      if @registration.update_attributes(params[:registration])
-
-        # update answers
-        i=0
-        @registration.sort_answers.each do |a|
-          answer_i = answers_params.delete(i.to_s)
-          a.update_attributes(answer_i)
-          i+=1
-        end
-        
+      if @registration.update_attributes(params[:registration])    
         format.html { redirect_to user_event_registration_path(@user, @event, @registration), notice: 'Registration was successfully updated.' }
       else
         format.html { render action: "edit" }

@@ -10,7 +10,7 @@
       </ul>
       Please go back and try again. Thanks.
     </div>
-  <% else %>
+  <% end %>
 
   <div class="field">
     <%= f.label :title %><br />
@@ -34,63 +34,52 @@
   </div>
   
   <!-- Questions -->
-  <% @pattern_questions.each do |q| %>
+  <%= f.fields_for :questions, @event.questions do |q| %>
   	
-  	<% if q.instance_of?(TextQuestion) %>
-  		
-  		<%= f.fields_for :text_questions do |tq| %>	
+		<div class="field">
+			<%= q.label :question %>
+			<%= q.text_field :question %>
+		</div>
+		<div class="field">
+			<%= q.label :position %>
+			<%= q.text_field :position %>
+		</div> 
+		
+		<% if @question_types[q.object.position] == "TextQuestion" %>
 			<div class="field">
-				<%= tq.label :question %>
-				<%= tq.text_field :question, :value => q.question %>
+				<%= q.hidden_field :type, :value => "TextQuestion" %>
 			</div>
-			<div class="field">
-				<%= tq.label :position %>
-				<%= tq.text_field :position, :value => q.position %>
-			</div> 
 		<% end %>
 		 	 
-	<% elsif q.instance_of?(BoolQuestion) %>
-	 	 <%= f.fields_for :bool_questions do |bq| %>	
+		<% if @question_types[q.object.position] == "BoolQuestion" %>
 			<div class="field">
-				<%= bq.label :question %>
-				<%= bq.text_field :question, :value => q.question %>
-		 	</div>
-		 	<div class="field">
-				<%= bq.label :option1 %>
-				<%= bq.text_field :option1, :value => q.option1 %>
+				<%= q.label :option1 %>
+				<%= q.text_field :option1 %>
 		 	</div>
 			<div class="field">
-				<%= bq.label :option2 %>
-				<%= bq.text_field :option2, :value => q.option2 %>
+				<%= q.label :option2 %>
+				<%= q.text_field :option2 %>
 		 	</div>
 		 	<div class="field">
-		 		<%= bq.label :position %>
-		 		<%= bq.text_field :position, :value => q.position %>
-		 	</div> 
-		<% end %> 	
-	
-	<% elsif q.instance_of?(OptQuestion) %>
-	 	 <%= f.fields_for :opt_questions do |oq| %>	
+				<%= q.hidden_field :type, :value => "BoolQuestion" %>
+			</div>
+		<% end %>
 		
-			<div class="field">
-				<%= oq.label :question %>
-				<%= oq.text_field :question, :value => q.question %>
+		<% if @question_types[q.object.position] == "OptQuestion" %>
+		 	<div class="field">
+				<%= q.label :options %>
+				<%= q.text_area :options %>
 		 	</div>
 		 	<div class="field">
-				<%= oq.label :options %>
-				<%= oq.text_area :options, :value => q.options %>
-		 	</div>
-		 	<div class="field">
-		 		<%= oq.label :position %>
-		 		<%= oq.text_field :position, :value => q.position %>
-		 	</div> 
-		<% end %>	 	 
+				<%= q.hidden_field :type, :value => "OptQuestion" %>
+			</div>
+	 	<% end %>
 	 	 
 	<% end %>
-  <% end %>
+
   
   <div class="actions">
     <%= f.submit :class => "btn btn-primary"%>
   </div>
-<% end %>
+
 <% end %>

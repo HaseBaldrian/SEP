@@ -71,8 +71,25 @@ class EventsController < ApplicationController
   # POST /events
   # POST /events.json
   def create
-    @user = User.find(params[:user_id])
-    @event = @user.events.create(params[:event])    
+    @user = User.find(params[:user_id]) 
+    
+    detached_params = detach_questions_and_types_params
+    questions_params = detached_params.delete('questions')
+    type_params = detached_params.delete('types')
+    
+    # detach_params wieder zu event_params dazu
+    if questions_params
+      params[:event] = params[:event].merge("questions_attributes" => questions_params)
+    end 
+    
+    @event = @user.events.create(params[:event]) 
+    
+    questions =  @event.questions 
+    i=0
+    questions.each do |q|
+      q.type = type_params.delete(i.to_s)
+      i+=1
+    end 
 
     respond_to do |format|
       if @event.save
@@ -104,6 +121,10 @@ class EventsController < ApplicationController
     @event = Event.find(params[:id])
     @id = @event.id
     @user = @event.user_id 
+    questions = @event.questions
+    questions.each do |q|
+      q.destroy
+    end
     @event.destroy
 
     respond_to do |format|
@@ -114,21 +135,62 @@ class EventsController < ApplicationController
   
   def duplicate
     @pattern = Event.find(params[:event_id])
-    @pattern_questions = []
-    @pattern_questions = @pattern.text_questions + @pattern.bool_questions + @pattern.opt_questions
-   
-    # questions nach position sortieren
-    @pattern_questions = @pattern_questions.sort_by{ |q| q.position.to_i } 
-
+    @pattern_questions = @pattern.questions
+    
     @user = User.find_by_id(session[:user_id])
     @event = Event.new
+       
+    # questions nach position sortieren, position updaten
+    @pattern_questions = @pattern_questions.sort_by{ |q| q.position.to_i } 
+    i=0
+    @pattern_questions.each do |q|
+      q.update_attributes(:position => i)
+      i+=1
+    end
     
-     @tq = @event.text_questions.build
-     @bq = @event.bool_questions.build
-     @oq = @event.opt_questions.build
+    @question_types = []
+    
+    @pattern_questions.each do |pq|
+        @q = @event.questions.build(:question => pq.question, :position => pq.position, :option1 => pq.option1, :option2 => pq.option2, :options => pq.options)
+        @question_types[pq.position] = pq.type
+    end
+
     
     respond_to do |format|
       format.html
+    end
+  end
+  
+    private
+  
+  # questions und types aus params entfernen
+  # questions_params: alle attribute ohne :type, {"0" => {...}, "1" => {...}, ...}
+  # type_params: alle antwort-typen, {"0" => {:type => TextAnswer}, "1" => {:type => ...}, ...}
+  # returns: {"questions" => questions_params, "types" => type_params}       
+  def detach_questions_and_types_params
+    if !params[:event][:questions_attributes].blank? 
+      
+      # answers-attributes ablösen
+      questions_params = params[:event].delete(:questions_attributes)
+      
+      # type-attribute der questions rauslösen
+
+      i=0
+      q_params = {}
+      type_params = {}
+      
+      questions_params.count.times do 
+        question_i = questions_params.delete(i.to_s)
+        if !question_i[:type].blank?
+          type_i = question_i.delete(:type).constantize.to_s
+          type_params.merge!(i.to_s => type_i)
+        end
+        ##
+        q_params.merge!(i.to_s => question_i)
+        i+=1
+      end
+
+      return {'questions' => q_params}.merge('types' => type_params)
     end
   end
 end
