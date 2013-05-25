@@ -5,3 +5,5 @@
 	<div id="registrations_table">
 		<%= render "registrations_table" %>
 	</div>
+	
+	<%= link_to "Export as CSV", user_event_registrations_path(format: "csv") %>

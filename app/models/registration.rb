@@ -18,4 +18,23 @@ class Registration < ActiveRecord::Base
   def downcase_email
     self.email.downcase!
   end
+  
+  def self.to_csv registrations
+    firstline = ["EMAIL"]
+      registrations.first.answers.each do |answer|
+        firstline << answer.question.question.upcase
+      end
+    
+    CSV.generate do |csv|
+      csv << firstline
+      registrations.each do |registration|
+        inputs = [registration.email]
+        answers = registration.answers
+        answers.each do |answer|
+          inputs << answer.input
+        end        
+        csv << inputs
+      end 
+    end
+  end
 end

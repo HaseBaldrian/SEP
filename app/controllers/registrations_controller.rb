@@ -95,6 +95,7 @@ class RegistrationsController < ApplicationController
     
     respond_to do |format|
       format.html
+      format.csv { send_data Registration.to_csv(@registrations) }
     end
   end
   
