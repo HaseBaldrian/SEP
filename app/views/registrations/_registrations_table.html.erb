@@ -1,5 +1,6 @@
 <table class="table table-striped">
 	  <tr>
+	  		<th></th>
 	    	<th>Email</th>
 	    <% @questions.each do |q| %>
 	    	<th><%= q.question %></th>
@@ -7,8 +8,14 @@
 	    	<th></th>
 	  </tr>
 	
+	<% i=1 %>
 	<% @registrations.each do |r| %>
 	  <tr id=<%= r.id %>>
+	  		<td><% if i>r.event.max_registration_count && r.event.max_registration_count != -1 %>
+	  				[W]
+	  			<% end %>
+	  			<% i+=1 %>
+	  		</td>
 	  		<td> <%= r.email %></td> 
 	  		
 	  		<% @answers = r.answers.all %>

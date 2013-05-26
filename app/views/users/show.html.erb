@@ -7,7 +7,9 @@
 
 <p>
   <b>Email:</b>
-  <%= @user.email %>
+  <div>
+  	<%= best_in_place @user, :email %>
+  </div>
 </p>
 
 <p>

@@ -3,6 +3,8 @@ class EventsController < ApplicationController
   skip_before_filter :authorize
   skip_before_filter :authorize2
   
+  #in_place_edit_for :event, :title
+  
 # wird nirgends(?) verwendet  
 #  def count
 #    @event = Event.find(params[:id])
@@ -14,8 +16,7 @@ class EventsController < ApplicationController
   def show
     @user = User.find(params[:user_id])
     @event = Event.find(params[:id])
-    @questions = @event.questions 
-    logger.info @questions.inspect
+    @questions = @event.questions
     
     @event.update_attributes(:questions_count => @questions.count)
     
