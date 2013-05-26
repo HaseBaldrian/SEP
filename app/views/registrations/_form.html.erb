@@ -44,8 +44,23 @@
 		 		<%= a.hidden_field :type, :value => "BoolAnswer" %>
 		 	</div> 
 		 	
-	 	 <% elsif %>
-			Checkboxen
+	 	 <% elsif q.type == "OptQuestion" %>
+			<div class="field">
+				<%= a.label :input, q.question %> 
+				 
+				<% q.options.each_line do |opt| %>
+					<% if a.object.input.include?(opt) %>
+						<%= check_box_tag a.object.position.to_s+'_options[]', opt, true %>					
+					<% else %>
+						<%= check_box_tag a.object.position.to_s+'_options[]', opt, false %>
+					<% end %>
+					
+					<%= a.label opt %>
+				<% end %>
+	 		 </div>		
+	 		 <div class="field">
+		 		<%= a.hidden_field :type, :value => "OptAnswer" %>
+		 	</div> 
 		<% end %>
 		
 	 	<div class="field">

@@ -16,11 +16,13 @@ class RegistrationsController < ApplicationController
       @user = @event.user
       @questions = @event.questions
       
-      # questions nach position sortieren
+      # questions nach position sortieren & position updaten
       @questions = @questions.sort_by{ |q| q.position.to_i } 
-  
+      i=0
       @questions.each do |q|
-          @a = @registration.answers.build(:question_id => q.id, :position => q.position)
+        q.update_attributes(:position => i)
+        i+=1
+        @a = @registration.answers.build(:question_id => q.id, :position => q.position)
       end
     end
     
@@ -43,9 +45,14 @@ class RegistrationsController < ApplicationController
     answers_params = detached_params.delete('answers')
     type_params = detached_params.delete('types')
     
+    # options zu detach_params dazu
+    options_params = detach_options_params(answers_params.count)
+    match_answers_and_options answers_params, options_params
+    
+    
     # detach_params wieder zu registration_params dazu
     if answers_params
-      params[:registration] = params[:registration].merge("answers_attributes" => answers_params)
+      params[:registration].merge!("answers_attributes" => answers_params)
     end 
     
     @registration = @event.registrations.create(params[:registration]) 
@@ -57,13 +64,6 @@ class RegistrationsController < ApplicationController
       i+=1
     end 
         
-    
-    
-    # TODO opt_answers -> checkboxen
-
-   
-    
-
     respond_to do |format|
       if @registration.save   
         format.html { redirect_to user_event_registration_path(@user, @event, @registration), notice: 'Registration was successfully created.' }
@@ -121,6 +121,10 @@ def update
     
     detached_params = detach_answers_and_types_params
     answers_params = detached_params.delete('answers')
+    
+    # options zu detach_params dazu
+    options_params = detach_options_params(answers_params.count)
+    match_answers_and_options answers_params, options_params
     
     # detach_params wieder zu registration_params dazu
     if answers_params
@@ -183,5 +187,33 @@ def update
 
       return {'answers' => a_params}.merge('types' => type_params)
     end
+  end
+  
+  # count: anzahl der antworten
+  def detach_options_params count
+    if !params.blank?
+      i=0
+      options_params = {}
+      count.times do
+          opt_i = params.delete(i.to_s+'_options')
+          if !opt_i.blank?
+            opt_i = opt_i.join
+            options_params.merge!(i.to_s+'_options' => opt_i)
+          end  
+          i+=1
+      end
+    end 
+    return options_params
+  end
+  
+  def match_answers_and_options answers_params, options_params
+    i=0
+    answers_params.count.times do
+      if !options_params[i.to_s+'_options'].blank?
+        answers_params[i.to_s].merge!('input' => options_params.delete(i.to_s+'_options'))
+      end  
+      i+=1
+    end 
+    return answers_params
   end
 end
