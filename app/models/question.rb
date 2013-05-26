@@ -6,4 +6,12 @@ class Question < ActiveRecord::Base
   
   validates :question, :presence => true
   validates :position, :presence => true
+  
+  before_update :clear_empty_lines
+  
+  def clear_empty_lines
+    if self.options
+      # TODO leere zeilen löschen
+    end
+  end
 end
