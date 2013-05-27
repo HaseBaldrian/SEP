@@ -28,7 +28,7 @@ class RegistrationsController < ApplicationController
     
     respond_to do |format|
       unless @event
-        format.html { render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found }
+        format.html { render :status => 404, :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found }
       else 
         format.html # new.html.erb
       end

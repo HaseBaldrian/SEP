@@ -14,6 +14,11 @@ class Question < ActiveRecord::Base
   def clear_empty_lines
     if self.options
       # TODO leere zeilen löschen
+      # self.options.each_lines do |l|
+        # if l.strip.blank? # heißt: ist leerzeile
+          # #... 
+        # end
+      # end
     end
   end
 end

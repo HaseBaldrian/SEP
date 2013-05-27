@@ -14,6 +14,7 @@
 //= require bootstrap/js/bootstrap-dropdown
 //= require jquery
 //= require jquery_ujs
+//= require jquery.ui.all
 //= require best_in_place
 //= require best_in_place.purr
 //= require_tree .
@@ -21,8 +22,9 @@
 
 $(document).ready(function() {
   /* Activating Best In Place */
-  jQuery(".best_in_place").best_in_place();
+  jQuery(".best_in_place").best_in_place(); 
 });
+
 
 
 

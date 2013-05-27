@@ -10,12 +10,28 @@ class QuestionsController < ApplicationController
     if !params[:question].blank? && !params[:question][:type].blank?
       model = params[:question].delete(:type).constantize.to_s
     end
+    
+    params[:question].merge!('event_id' => @event.id)
    
     #create question (u.U. mit neuen Parametern)
-    @q = @event.questions.create(params[:question])   
-    @q.type = model
-
-    @questions = @event.questions
+    # @q = @event.questions.create(params[:question])   
+    # @q.type = model
+    
+    @q = nil
+    
+    case model
+    when "TextQuestion" then begin
+      @q = TextQuestion.create(params[:question])
+      logger.info "hallo!"
+    end
+    when "BoolQuestion" then
+      @q = BoolQuestion.create(params[:question])
+    when "OptQuestion" then
+      @q = OptQuestion.create(params[:question])
+    end 
+    
+    
+    @questions = @event.questions.all
    # logger.info "loggerinfo: "+@questions.inspect
     
     # questions nach position sortieren

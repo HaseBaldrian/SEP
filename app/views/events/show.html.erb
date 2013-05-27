@@ -5,7 +5,9 @@
 	
 		<dl class="dl-horizontal">
 		<dt>Titel:</dt>
-		<dd><%= best_in_place user_event_path(@event.user, @event), :title, :type => :input %></dd>
+		<dd><%= #best_in_place user_event_path(@event.user, @event), :title, :type => :input 
+		%>
+		<%= @event.title %></dd>
 		<dt>Beschreibung</dt>
 		<dd><%= @event.description %></dd>
 		<dt>Anmeldelink:</dt>
