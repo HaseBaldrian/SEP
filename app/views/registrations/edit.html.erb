@@ -1,11 +1,15 @@
-<h1>Änderung der Anmeldung: <br /> 
-	<%= @event.title %></h1>
+<h1>ÄNDERUNG der Anmeldung</h1>
+	<h2 class="text-center"><%= @event.title %></h2><br />
 
-<div><!-- Veranstaltungsdetails -->
-	<p>Veranstaltungsdetails: <br /> 
-		<%= @event.description%></p>
+<div class="well"><!-- Veranstaltungsdetails -->
+	<h4 class="text-right"> Veranstaltungsdetails</h4><br /> 
+		<%= @event.description%>
 </div>
 
-	<p id="notice"><%= notice %></p>
+	<!-- <p id="notice"><%= notice %></p> -->
 
-<%= render "form" %>
+<div class="well">
+	<h4 class="text-right">Ihre Anmeldedaten</h4><br />
+	
+	<%= render "form" %>
+</div>

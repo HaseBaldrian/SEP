@@ -13,9 +13,13 @@ Loginsystem::Application.routes.draw do
       resources :registrations
       get 'duplicate' => :duplicate
       post 'duplicate' => :create
-      resources :questions 
+      resources :questions do
+        resources :text_questions, :bool_questions, :opt_questions
+      end
     end
   end
+  
+  resources :text_answers, :bool_answers, :opt_answers
   
   controller :registrations do
     get 'anmeldung/:id' => :new

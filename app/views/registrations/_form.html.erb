@@ -11,44 +11,49 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :email %><br />
+	<table class="table table-striped">
+		<tr>
+			<td></th><%= f.label :email, "Email: " %></td>
+			<td><%= f.text_field :email %></td>
+		</tr>
+			
+	
+
+  <!-- <div>
+    <%= f.label :email, "Email: ", :style => "display:inline" %>
     <%= f.text_field :email %>
-  </div>
-  
+  </div> -->
   
   
   	<%= f.fields_for :answers, @registration.answers do |a| %>	
 		
 		<% q = a.object.question %>
-		
+
+		<tr>
 		<% if q.type == "TextQuestion" %>
-			<div class="field">
-				<%= a.label :input, q.question %>
-				<%= a.text_field :input %>
-		 	</div>
-		 	<div class="field">
-		 		<%= a.hidden_field :type, :value => "TextAnswer" %>
-		 	</div> 
+			<td><%= a.label :input, q.question %></td>
+			<td><%= a.text_field :input %></td>
+		 	
+		 		<%= a.hidden_field :type, :value => "TextAnswer" %> 
 		 	
 		<% elsif q.type == "BoolQuestion" %>
-			<div class="field">
-				<%= a.label :input, q.question %> 
+			<td><%= a.label :input, q.question %></td> 
 				 
+			<td><div class="field">
 				<%= a.radio_button :input, q.option1, :checked => true %> 
-				<%= a.label q.option1, :value => q.option1 %>
+				<%= a.label q.option1, :value => q.option1, :style => "display:inline" %>
 				<%= a.radio_button :input, q.option2 %>
-				<%= a.label q.option2, :value => q.option2 %>
-	 		 </div>		
+				<%= a.label q.option2, :value => q.option2, :style => "display:inline" %>
+				</div>
+	 		 </td>		
 	 		 <div class="field">
 		 		<%= a.hidden_field :type, :value => "BoolAnswer" %>
 		 	</div> 
 		 	
 	 	 <% elsif q.type == "OptQuestion" %>
-			<div class="field">
-				<%= a.label :input, q.question %> 
+			<td><%= a.label :input, q.question %></td> 
 				 
-				<% q.options.each_line do |opt| %>
+			<td><% q.options.each_line do |opt| %>
 					<% if a.object.input!=nil %>
 						<% if a.object.input.include?(opt) %>
 							<%= check_box_tag a.object.position.to_s+'_options[]', opt, true %>					
@@ -59,12 +64,13 @@
 						<%= check_box_tag a.object.position.to_s+'_options[]', opt, false %>
 					<% end %>
 					
-					<%= a.label opt %>
+					<%= a.label opt, :style => "display:inline" %><br />
 				<% end %>
-	 		 </div>		
+	 		 </td>		
 	 		 <div class="field">
 		 		<%= a.hidden_field :type, :value => "OptAnswer" %>
 		 	</div> 
+		 	</tr>
 		<% end %>
 		
 	 	<div class="field">
@@ -75,10 +81,11 @@
 	 	</div> 
 	<% end %>
  
-  
+
+</table>
     
-  <div class="actions">
-    <%= f.submit :class => "btn btn-primary"%>
+  <div class="actions" align="right">
+    <%= f.submit "Speichern", :class => "btn btn-success"%>
   </div>
 
 <% end %>

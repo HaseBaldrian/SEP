@@ -80,7 +80,7 @@ class UsersController < ApplicationController
         # neue session eröffnen, also gleich einloggen
         session[:user_id] = @user.id
         
-        Notifier.registration_received(@user).deliver
+        #Notifier.registration_received(@user).deliver
         format.html { redirect_to users_url, notice: 'User ' + @user.name + ' was successfully created.' }
       else
         format.html { render action: "new" }      end

@@ -1,34 +1,40 @@
-<h1>Anmeldung: <br /> 
-	<%= @event.title %></h1>
+	<h1>ANMELDUNG</h1>
+	<h2 class="text-center"><%= @event.title %></h2><br />
 
-<div><!-- Veranstaltungsdetails -->
-	<p>Veranstaltungsdetails: <br /> 
-		<%= @event.description%></p>
+<div class="well"><!-- Veranstaltungsdetails -->
+	<h4 class="text-right"> Veranstaltungsdetails</h4><br /> 
+		<%= @event.description%>
 </div>
 
-	<p id="notice"><%= notice %></p>
+	<!-- <p id="notice"><%= notice %></p> -->
 
+<div class="well">
 <% if @event.expiry < Date.today  || @event.locked %>
-	<h1>Anmeldung leider bereits geschlossen!</h1>
-<% end %>
+	<div class="alert alert-error"><h3>Anmeldung leider bereits geschlossen!</h3></div>
 
-<% if @event.registrations.count >= @event.max_registration_count && @event.max_registration_count > 0 %>
+<% elsif @event.registrations.count >= @event.max_registration_count && @event.max_registration_count > 0 %>
 	
-	<h2>Achtung!</h2>
-	<p>In dieser Veranstaltung sind bereits alle Plätze belegt. 
-		Wenn Sie sich anmelden, speichern wir Ihre Daten auf einer Warteliste. 
-		Sollten Sie nachrücken, informieren wir Sie. 		
-	</p>
+	
+	<div class="alert alert-block">
+		<h4>Achtung!</h4>
+		In dieser Veranstaltung sind bereits alle Plätze belegt. 
+		Wenn Sie sich anmelden, speichern wir Ihre Daten auf einer Warteliste. <br />
+		Sollten Sie nachrücken, informieren wir Sie umgehend per Email. 		
+	</div><br />
+	
+	<h4 class="text-right">Ihre Anmeldedaten</h4><br />
 
 	<div id="form">
 		<%= render "form" %>
 	</div>
-<% end %>
 
-<% if (@event.expiry >= Date.today && !@event.locked)  && (@event.registrations.count < @event.max_registration_count || @event.max_registration_count < 0) %>
-
+<% else %>
+	
+	<h4 class="text-right">Ihre Anmeldedaten</h4><br />
+	
 	<div id="form">
 		<%= render "form" %>
 	</div>
 
 <% end %>
+</div>
