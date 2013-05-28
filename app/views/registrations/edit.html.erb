@@ -9,6 +9,11 @@
 	<!-- <p id="notice"><%= notice %></p> -->
 
 <div class="well">
+	
+	<% if @waitlist %>
+		<%= render 'waitlist_info' %>
+	<% end %>
+	
 	<h4 class="text-right">Ihre Anmeldedaten</h4><br />
 	
 	<%= render "form" %>

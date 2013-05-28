@@ -118,6 +118,16 @@ class RegistrationsController < ApplicationController
     @user = User.find(params[:user_id])
     @event = Event.find(params[:event_id])
     @registration = Registration.find(params[:id])
+    
+    @waitlist = false
+    @registrations = @event.registrations.find(:all, :order => 'created_at') 
+    i=0
+    @registrations.each do |r|
+      if @registrations[i] == @registration && i>=@event.max_registration_count
+        @waitlist = true
+      end
+      i+=1
+    end
        
     respond_to do |format|
       format.html
