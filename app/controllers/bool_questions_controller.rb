@@ -44,6 +44,20 @@ class BoolQuestionsController < ApplicationController
     redirect_to user_event_path(@user, @event)
   end
   
+  def update
+    @event = Event.find(params[:event_id])
+    @user = @event.user_id
+    @question = BoolQuestion.find(params[:id])
+    
+    respond_to do |format|
+      if @event.update_attributes(params[:bool_question])
+        format.json { respond_with_bip(@question) }
+      else
+        format.json { respond_with_bip(@question) }
+      end
+    end
+  end
+  
   def destroy
     @boolq = BoolQuestion.find(params[:id])
     @bq_id = @boolq.position

@@ -1,44 +1,47 @@
 <div class="row-fluid">
 <div class="span6">
-
+	
+	<div class="well">
+	
 	<p id="notice"><%= notice %></p>
 	
 		<dl class="dl-horizontal">
-		<dt>Titel:</dt>
-		<dd><%= #best_in_place user_event_path(@event.user, @event), :title, :type => :input 
-		%>
-		<%= @event.title %></dd>
+		<dt>Titel</dt>
+		<dd><a id="edittitle" href="#"><i class="icon-pencil"></i></a>
+			<%= best_in_place @event, :title, :path => user_event_path, :activator => "#edittitle" %>
+		</dd>
 		<dt>Beschreibung</dt>
-		<dd><%= @event.description %></dd>
-		<dt>Anmeldelink:</dt>
+		<dd><a id="editdescription" href="#"><i class="icon-pencil"></i></a>
+			<%= best_in_place @event, :description, :path => user_event_path, :activator => "#editdescription", :type => :textarea %>			
+		</dd>
+		<dt>Anmeldelink</dt>
 		<dd>http://localhost:3000/anmeldung/<%= @event.link %></dd>
-		<dt>Gesperrt:</dt>
-		<dd><% if @event.locked %>
-	    		ja
-	    	<% else %>
-	    		nein
-	    	<% end %></dd>
-		<dt>Anmeldungen:</dt>
+		<dt>Gesperrt</dt>
+		<dd><a id="editlocked" href="#"><i class="icon-pencil"></i></a>
+			<%= best_in_place @event, :locked, :path => user_event_path, :activator => "#editlocked", :type => :checkbox, :collection => ["nein", "ja"] %>	
+		</dd>
+		<dt>Anmeldungen</dt>
 		<dd><%= @event.registrations.count %></dd>
-		<dt>Max. Teilnehmerzahl:</dt>
-		<dd><% if @event.max_registration_count == -1 %>
-	    		unbegrenzt
-	    	<% else %>
-	    		<%= @event.max_registration_count %>
-	    	<% end %></dd>
-		<dt>Anmeldeschluss:</dt>	
-		<dd><%= @event.expiry.strftime('%d.%m.%Y') %></dd>
-		<dt>Created by:</dt>
+		<dt>Max. Teilnehmerzahl</dt>
+		<dd><a id="editmaxregistrationcount" href="#"><i class="icon-pencil"></i></a>
+			<%= best_in_place @event, :max_registration_count, :path => user_event_path, :activator => "#editmaxregistrationcount" %>
+	    </dd>
+		<dt>Anmeldeschluss</dt>	
+		<dd><a id="editexpiry" href="#"><i class="icon-pencil"></i></a>
+			<%= best_in_place @event, :expiry, :path => user_event_path, :activator => "#editexpiry", :type => :date %>
+		</dd>
+		<dt>Erstellt von</dt>
 		<dd><%= User.find(@event.user_id).name %></dd>
 	</dl>
 	
-	<%= link_to "Edit", edit_user_event_path(@user,@event) %> |
 	<%= link_to "Veranstaltung duplizieren", user_event_duplicate_path(@user,@event) %> |
 	<%= link_to "Alle Anmeldungen", user_event_registrations_path(@user,@event) %> 
 	
+	</div>
 	
-	
-	<h2>Add a Textquestion:</h2>
+	<div class="well">
+	<h4>Frage für Texteingaben</h4>
+	<p><em>Vorname, Nachname, Adresse, ...</em></p>
 	<%= form_for([@user, @event, @event.questions.build], 
 			:url => user_event_questions_path(@user, @event), :remote => true) do |f| %>
 		
@@ -51,27 +54,28 @@
 		<div class="field">
 			<%= f.hidden_field :type, :value => "TextQuestion" %>
 		</div>
-		<div class="actions">
-			<%= f.submit :class => "btn", :remote => true %>
+		<div class="actions" align="right">
+			<%= f.submit "Erstellen", :class => "btn", :remote => true %>
 		</div>
-		
 	<% end %>
+	</div>
 	
-	
-	<h2>Add a Boolquestion:</h2>
+	<div class="well">
+	<h4>Frage für Alternativauswahl</h4>
+	<p><em>Geschlecht: männlich/weiblich, ...</em></p>
 	<%= form_for([@user, @event, @event.questions.build], 
 			:url => user_event_questions_path(@user, @event), :remote => true) do |f| %>
 		
 		<div class="field">
-			<%= f.label :question %>
+			<%= f.label :question, "Frage: ", :style => "display:inline" %>
 			<%= f.text_field :question %>
 		</div>
 		<div class="field">
-			<%= f.label :option1 %>
+			<%= f.label :option1, "Alternative 1: ", :style => "display:inline" %>
 			<%= f.text_field :option1 %> 
 		</div>
 		<div class="field">
-			<%= f.label :option2 %>
+			<%= f.label :option2, "Alternative 2: ", :style => "display:inline" %>
 			<%= f.text_field :option2 %>
 		</div>
 		<div class="field">
@@ -80,22 +84,26 @@
 		<div class="field">
 			<%= f.hidden_field :type, :value => "BoolQuestion" %>
 		</div>
-		<div class="actions">
-			<%= f.submit :class => "btn", :remote => true %>
+		<div class="actions" align="right">
+			<%= f.submit "Erstellen", :class => "btn", :remote => true %>
 		</div>
-		
 	<% end %>
-
-	<h2>Add an Optquestion:</h2>
+	</div>
+	
+	<div class="well">
+	<h4>Frage zur Auswahl verschiedener Optionen</h4>
+	<p><em>Fächer: Informatik/Mathematik/Spanisch/... <br />
+		(Pro Option eine Zeile)
+	</em></p>
 	<%= form_for([@user, @event, @event.questions.build], 
 			:url => user_event_questions_path(@user, @event), :remote => true) do |f| %>
 		
 		<div class="field">
-			<%= f.label :question %>
+			<%= f.label :question, "Frage: ", :style => "display:inline" %>
 			<%= f.text_field :question %>
 		</div>
 		<div class="field">
-			<%= f.label :options %> 
+			<%= f.label :options, "Optionen: ", :style => "display:inline" %> 
 			<%= f.text_area :options %> 
 		</div>
 		<div class="field">
@@ -104,17 +112,21 @@
 		<div class="field">
 			<%= f.hidden_field :type, :value => "OptQuestion" %>
 		</div>
-		<div class="actions">
-			<%= f.submit :class => "btn", :remote => true %>
+		<div class="actions" align="right">
+			<%= f.submit "Erstellen", :class => "btn", :remote => true %>
 		</div>
-		
 	<% end %>
+	</div>
 </div>
+
+
 <div class="span6">
-	<!-- Auflistung der Questions (tq_table rendert ALLE questions!) -->
+	<!-- Auflistung der Questions -->
 	
-	<div id="tq_table">
-		<%= render "questions/q_table" %>
+	<div class="well">
+		<div id="tq_table">
+			<%= render "questions/q_table" %>
+		</div>
 	</div>
 	
 </div>

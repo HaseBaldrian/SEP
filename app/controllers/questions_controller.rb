@@ -54,6 +54,29 @@ class QuestionsController < ApplicationController
     end
   end
   
+  def update
+    @event = Event.find(params[:event_id])
+    @user = @event.user_id
+    @question = Question.find(params[:id])
+    
+    case @question.type
+    when "TextQuestion" then       
+      TextQuestion.update(@question, params[:text_question])
+    when "BoolQuestion" then
+      BoolQuestion.update(@question, params[:bool_question])
+    when "OptQuestion" then
+      OptQuestion.update(@question, params[:opt_question])
+    end  
+    
+    respond_to do |format|
+      if @event.update_attributes(params[:question])
+        format.json { respond_with_bip(@question) }
+      else
+        format.json { respond_with_bip(@question) }
+      end
+    end
+  end
+  
   def destroy
     @event = Event.find(params[:event_id])
     @user = User.find(params[:user_id])

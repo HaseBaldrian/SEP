@@ -110,8 +110,10 @@ class EventsController < ApplicationController
     respond_to do |format|
       if @event.update_attributes(params[:event])
         format.html { redirect_to user_event_path(@user, @event), notice: 'Event was successfully updated.' }
+        format.json { respond_with_bip(@event) }
       else
         format.html { render action: "edit" }
+        format.json { respond_with_bip(@event) }
       end
     end
   end

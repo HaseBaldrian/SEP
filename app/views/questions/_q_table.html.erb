@@ -3,7 +3,7 @@
 		<tr>
  			<th>Frage</th>
  			<th>Optionen (if any)</th>
- 			<th>Aktionen</th>
+ 			<th>Löschen</th>
  			<th>pos</th>
  			<th>id</th>
  		</tr>
@@ -11,10 +11,15 @@
 		
 		<% @questions.each do |q| %>
 				<tr id=<%= q.id %>>
-		   			<td><%= q.question %></td>
+		   			<td><a id=<%= "editquestion"+q.id.to_s %> href="#"><i class="icon-pencil"></i></a>
+						<%= best_in_place q, :question, :path => user_event_question_path(q.event.user,q.event,q), :activator => "#editquestion"+q.id.to_s %>
+					</td>
 		   			<td><% if q.type == "BoolQuestion" %>
-			   				<%= q.option1 %> <br />
-			   				<%= q.option2 %>
+			   				<a id=<%= "editoption1"+q.id.to_s %> href="#"><i class="icon-pencil"></i></a>
+			   				<%= best_in_place q, :option1, :path =>  user_event_question_path(q.event.user,q.event,q), :activator => "#editoption1"+q.id.to_s %> <br />
+			   				<a id=<%= "editoption2"+q.id.to_s %> href="#"><i class="icon-pencil"></i></a>
+			   				<%= best_in_place q, :option2, :path =>  user_event_question_path(q.event.user,q.event,q), :activator => "#editoption2"+q.id.to_s %> 
+			   				
 		   				<% end %> 
 						
 						<% if q.type == "OptQuestion"  %>
@@ -23,8 +28,7 @@
 							<% end %>
 						<% end %>
 		   			</td>
-		   			<td> edit | 	
-	    				<%= link_to 'destroy', 
+		   			<td> <%= link_to 'löschen', 
 							user_event_question_path(@event.user_id, @event, q), 
 							confirm: 'Sicher??!', 
 	    					method: :delete, 

@@ -44,6 +44,19 @@ class TextQuestionsController < ApplicationController
     redirect_to user_event_path(@user, @event)
   end
   
+  def update
+    @event = Event.find(params[:event_id])
+    @user = @event.user_id
+    @question = TextQuestion.find(params[:id])
+    
+    respond_to do |format|
+      if @event.update_attributes(params[:text_question])
+        format.json { respond_with_bip(@question) }
+      else
+        format.json { respond_with_bip(@question) }
+      end
+    end
+  end
   
   def destroy
     @textq = TextQuestion.find(params[:id])
