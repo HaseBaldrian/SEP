@@ -13,10 +13,7 @@ Loginsystem::Application.routes.draw do
       resources :registrations
       get 'duplicate' => :duplicate
       post 'duplicate' => :create
-      
-      resources :questions do
-        resources :text_questions, :bool_questions, :opt_questions
-      end
+      resources :questions 
     end
   end
   

@@ -40,3 +40,4 @@ gem 'jquery-ui-rails'
 
 gem 'best_in_place'
 
+gem 'bootstrap-sass'

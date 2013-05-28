@@ -10,7 +10,11 @@
 	
 	<% i=1 %>
 	<% @registrations.each do |r| %>
-	  <tr id=<%= r.id %>>
+	  <tr id=<%= r.id %> 
+	  	<% if i>r.event.max_registration_count && r.event.max_registration_count != -1 %>
+	  		class="error"
+	  	<% end %>
+	  	>
 	  		<td><% if i>r.event.max_registration_count && r.event.max_registration_count != -1 %>
 	  				[W]
 	  			<% end %>

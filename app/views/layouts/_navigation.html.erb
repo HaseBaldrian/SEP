@@ -1,0 +1,43 @@
+<div id="user_nav">
+
+  <% if session[:user_id] %>
+  	<ul class="nav">
+  		 <li>
+		    <%= link_to "Veranstaltungsübersicht", users_path %> 
+		 </li>
+		 <li class="divider-vertical"></li>
+		 <li> 	
+		    <%= link_to "Profil bearbeiten", edit_user_path(session[:user_id]) %>
+		 </li>
+		 <% if session[:user_id] == 19 %>
+		 <li class="divider-vertical"></li>
+		 <li>		    
+		    <%= link_to "User bearbeiten", admin_path %>		  
+		 </li>
+		 <% end %>
+		 <li class="divider-vertical"></li>
+		 <li>
+		 	<%= link_to "Logout", logout_path, :method => :delete%>
+		 </li>
+	</ul>
+	
+	<!-- Test Dropdownmenue-->
+	<!--
+	<div class="dropdown">
+		<a class="dropdown-toggle" href="#" data-toggle="dropdown" >
+			TEXT <b class="caret"></b></a>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+			<li><%= link_to "Logout", logout_path, :method => :delete, :class => "btn"%></li>
+			<li><%= link_to "Edit Profile", edit_user_path(session[:user_id]), :class => "btn" %></li>
+			<li><%= link_to "Eventlist", users_path, :class => "btn" %> </li>
+			<% if session[:user_id] == 19 %>
+		    	<li><%= link_to "Administrate Users", admin_path, :class => "btn" %></li>
+		    <% end %>
+		</ul>
+	</div>
+	-->
+	<!-- Test Dropdownmenue ende -->
+	
+  <% end %>
+	
+</div>

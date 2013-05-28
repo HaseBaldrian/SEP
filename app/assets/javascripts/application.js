@@ -10,13 +10,12 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
-//= require bootstrap/js/bootstrap
-//= require bootstrap/js/bootstrap-dropdown
 //= require jquery
 //= require jquery_ujs
-//= require jquery.ui.all
+//= require jquery-ui
 //= require best_in_place
 //= require best_in_place.purr
+//= require bootstrap
 //= require_tree .
 
 
