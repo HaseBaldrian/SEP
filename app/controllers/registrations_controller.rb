@@ -79,6 +79,16 @@ class RegistrationsController < ApplicationController
     @event = Event.find(params[:event_id])
     @registration = Registration.find(params[:id])
     
+    @waitlist = false
+    @registrations = @event.registrations.find(:all, :order => 'created_at') 
+    i=0
+    @registrations.each do |r|
+      if @registrations[i] == @registration && i>=@event.max_registration_count
+        @waitlist = true
+      end
+      i+=1
+    end
+    
             # answers nach position sortieren
     @answers = @registration.answers
     @answers = @answers.sort_by{ |q| q.position.to_i } 
