@@ -1,7 +1,7 @@
 class Event < ActiveRecord::Base
   belongs_to :user
-  has_many :questions
-  has_many :registrations
+  has_many :questions, :dependent => :destroy
+  has_many :registrations, :dependent => :destroy
   
   validates :title, :presence => true, :uniqueness => true
   validates :description, :presence => true

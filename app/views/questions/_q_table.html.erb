@@ -4,8 +4,6 @@
  			<th>Frage</th>
  			<th>Optionen (if any)</th>
  			<th>Löschen</th>
- 			<th>pos</th>
- 			<th>id</th>
  		</tr>
 		
 		
@@ -27,15 +25,12 @@
 							<%= best_in_place q, :options, :path => user_event_question_path(q.event.user,q.event,q), :activator => "#editoptions"+q.id.to_s, :type => :textarea %>
 						<% end %>
 		   			</td>
-		   			<td> <%= link_to 'löschen', 
+		   			<td> <%= link_to '<i class="icon-remove-circle"></i>'.html_safe, 
 							user_event_question_path(@event.user_id, @event, q), 
 							confirm: 'Sicher??!', 
 	    					method: :delete, 
 	    					:remote => :true 
 	    				%>
-
-		    		<td><%= q.position %></td>
-		    		<td><%= q.id %></td>
 		   		</tr>
 		<% end %>
 	</table>

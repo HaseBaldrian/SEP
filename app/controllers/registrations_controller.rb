@@ -171,11 +171,7 @@ def update
     if registrations[@event.max_registration_count] != nil &&  @event.max_registration_count != -1 
       logger.info "Infomail an: " + registrations[@event.max_registration_count].inspect
     end
-    
-    answers = @registration.answers
-    answers.each do |a|
-      a.destroy
-    end
+
     @registration.destroy
     
     respond_to do |format|

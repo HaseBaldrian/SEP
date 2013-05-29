@@ -124,10 +124,6 @@ class EventsController < ApplicationController
     @event = Event.find(params[:id])
     @id = @event.id
     @user = @event.user_id 
-    questions = @event.questions
-    questions.each do |q|
-      q.destroy
-    end
     @event.destroy
 
     respond_to do |format|

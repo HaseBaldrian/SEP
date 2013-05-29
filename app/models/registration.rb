@@ -1,6 +1,6 @@
 class Registration < ActiveRecord::Base
   belongs_to :event
-  has_many :answers
+  has_many :answers, :dependent => :destroy
   
   accepts_nested_attributes_for :answers, :allow_destroy => true
   
