@@ -4,6 +4,7 @@
  			<th>Frage</th>
  			<th>Optionen (if any)</th>
  			<th>Löschen</th>
+ 			<th>pos</th>
  		</tr>
 		
 		
@@ -31,6 +32,16 @@
 	    					method: :delete, 
 	    					:remote => :true 
 	    				%>
+	    			</td>
+	    			<td><%= link_to '<i class="icon-arrow-down"></i>'.html_safe, 
+	    					user_event_question_position_down_path(@event.user_id, @event, q),  
+	    					:remote => true 
+	    				%>
+	    				<%= link_to '<i class="icon-arrow-up"></i>'.html_safe, 
+	    					user_event_question_position_up_path(@event.user_id, @event, q),  
+	    					:remote => true 
+	    				%>
+	    			</td>
 		   		</tr>
 		<% end %>
 	</table>

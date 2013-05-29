@@ -15,6 +15,8 @@ Loginsystem::Application.routes.draw do
       post 'duplicate' => :create
       resources :questions do
         resources :text_questions, :bool_questions, :opt_questions
+        get 'position_down' => :position_down
+        get 'position_up' => :position_up
       end
     end
   end

@@ -77,6 +77,65 @@ class QuestionsController < ApplicationController
     end
   end
   
+  # position += 1, "down" weil anschließend weiter unten in der Liste
+  def position_down 
+    @event = Event.find(params[:event_id])
+    @user = @event.user_id
+    @question = Question.find(params[:question_id])
+    
+    current_pos = @question.position
+    new_pos = current_pos + 1
+    @questions = @event.questions.find(:all, :order => 'position') 
+    if @questions[new_pos] 
+      @questions[new_pos].update_attributes(:position => current_pos)
+      @question.update_attributes(:position => new_pos)
+    end 
+    
+  # questions nach neuer position sortieren
+    @questions = @event.questions.find(:all, :order => 'position') 
+    i=0
+    @questions.each do |q|
+      q.update_attributes(:position => i)
+      i+=1
+    end
+    
+    respond_to do |format|
+      format.html { redirect_to user_event_path(@user, @event) }
+      format.js
+    end
+  end
+  
+    # position -= 1, "up" weil anschließend weiter oben in der Liste
+  def position_up 
+    @event = Event.find(params[:event_id])
+    @user = @event.user_id
+    @question = Question.find(params[:question_id])
+    
+    current_pos = @question.position
+    unless current_pos == 0
+      new_pos = current_pos - 1
+      logger.info "new_pos: " + new_pos.inspect
+      @questions = @event.questions.find(:all, :order => 'position') 
+      if @questions[new_pos] 
+        @questions[new_pos].update_attributes(:position => current_pos)
+        @question.update_attributes(:position => new_pos)
+      end 
+    end 
+    
+  # questions nach neuer position sortieren
+    @questions = @event.questions.find(:all, :order => 'position') 
+    i=0
+    @questions.each do |q|
+      q.update_attributes(:position => i)
+      i+=1
+    end
+    
+    respond_to do |format|
+      format.html { redirect_to user_event_path(@user, @event) }
+      format.js
+    end
+  end
+  
   def destroy
     @event = Event.find(params[:event_id])
     @user = User.find(params[:user_id])
