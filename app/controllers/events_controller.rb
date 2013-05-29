@@ -72,7 +72,38 @@ class EventsController < ApplicationController
   # POST /events
   # POST /events.json
   def create
+    @user = User.find(params[:user_id])     
+    @event = @user.events.create(params[:event]) 
+    
+    respond_to do |format|
+      if @event.save
+        format.html { redirect_to user_event_path(@user, @event), notice: 'Event was successfully created.' }
+      else
+        format.html { render action: "new" }
+      end
+    end
+  end
+  
+  def create_double
     @user = User.find(params[:user_id]) 
+    @pattern = Event.find(params[:event_id])
+    pattern_questions = @pattern.questions
+    @event = Event.new
+       
+    # questions nach position sortieren, position updaten
+    pattern_questions = pattern_questions.sort_by{ |q| q.position.to_i } 
+    i=0
+    pattern_questions.each do |q|
+      q.update_attributes(:position => i)
+      i+=1
+    end
+    
+    @question_types = []
+    
+    pattern_questions.each do |pq|
+        @q = @event.questions.build(:question => pq.question, :position => pq.position, :option1 => pq.option1, :option2 => pq.option2, :options => pq.options)
+        @question_types[pq.position] = pq.type
+    end
     
     detached_params = detach_questions_and_types_params
     questions_params = detached_params.delete('questions')
@@ -96,7 +127,7 @@ class EventsController < ApplicationController
       if @event.save
         format.html { redirect_to user_event_path(@user, @event), notice: 'Event was successfully created.' }
       else
-        format.html { render action: "new" }
+        format.html { render action: "duplicate" }
       end
     end
   end

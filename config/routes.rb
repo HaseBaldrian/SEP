@@ -12,7 +12,7 @@ Loginsystem::Application.routes.draw do
     resources :events do      
       resources :registrations
       get 'duplicate' => :duplicate
-      post 'duplicate' => :create
+      post 'duplicate' => :create_double
       get 'invert_locked' => :invert_locked
       resources :questions do
         resources :text_questions, :bool_questions, :opt_questions

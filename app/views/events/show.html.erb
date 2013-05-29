@@ -7,14 +7,18 @@
 	
 		<%= render 'event_table' %>
 	
+	<!-- TODO editieren-link -->
 	<%= link_to "Veranstaltung duplizieren", user_event_duplicate_path(@user,@event) %> |
-	<%= link_to "Alle Anmeldungen", user_event_registrations_path(@user,@event) %> 
+	<%= link_to "Alle Anmeldungen", user_event_registrations_path(@user,@event) %> |
+	<%= link_to "Löschen", user_event_path(@user, @event), confirm: 'Sicher?!', 
+	    								method: :delete %>
 	
 	</div>
 	
 	<div class="well">
 	<h4>Frage für Texteingaben</h4>
-	<p><em>Vorname, Nachname, Adresse, ...</em></p>
+	<p><em>Vorname, Nachname, Adresse, ... <br /> 
+		(Emailadresse wird immer abgefragt und muss hier nicht gesondert angelegt werden.)</em></p>
 	<%= form_for([@user, @event, @event.questions.build], 
 			:url => user_event_questions_path(@user, @event), :remote => true) do |f| %>
 		

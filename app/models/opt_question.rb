@@ -26,7 +26,6 @@ class OptQuestion < Question
       self.options.each_line do |l|
         unless l.strip.blank? # heißt: ist leerzeile
           options_new += l.strip + "<br />"
-          logger.info "options_new: " + options_new.inspect
         end
       end
     end

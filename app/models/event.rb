@@ -26,4 +26,13 @@ class Event < ActiveRecord::Base
     self.link = self.link.downcase
   end
   
+  def description_to_html
+    description_new = ""
+    if self.description
+      self.description.each_line do |l|
+        description_new += l.strip + "<br />"
+      end
+    end
+    return description_new
+  end
 end

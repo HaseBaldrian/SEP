@@ -1,38 +1,44 @@
-<%= form_for([@user, @event], :url => user_events_path(@user)) do |f| %>
-  <% if @event.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@event.errors.count, "error") %> prohibited this event from being saved:</h2>
+<h1>Veranstaltung kopieren: <%= @pattern.title %></h1>
 
-      <ul>
-      <% @event.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-      Please go back and try again. Thanks.
-    </div>
-  <% end %>
+<div class="well">
 
-  <div class="field">
-    <%= f.label :title %><br />
-    <%= f.text_field :title, :value => @pattern.title + " (Kopie)" %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br />
-    <%= f.text_area :description, :value => @pattern.description %>
-  </div>
-  <div class="field">
-    <%= f.label :locked %><br />
-    <%= f.check_box :locked, :value => @pattern.locked %>
-  </div>
-  <div class="field">
-    <%= f.label :max_registration_count %><br />
-    <%= f.number_field :max_registration_count, :value => @pattern.max_registration_count %>
-  </div>
-  <div class="field">
-    <%= f.label :expiry %><br />
-    <%= f.date_select :expiry, :value => @pattern.expiry %>
-  </div>
-  
+<%= form_for([@user, @event], :url => url_for(:controller => 'events', :action => 'create_double')) do |f| %>
+	  <% if @event.errors.any? %>
+	  	<div id="error_explanation">
+	      <h2><%= pluralize(@event.errors.count, "error") %> prohibited this event from being saved:</h2>
+	
+	      <ul>
+	      <% @event.errors.full_messages.each do |msg| %>
+	        <li><%= msg %></li>
+	      <% end %>
+	      </ul>
+	    </div>
+  	<% end %>
+
+	<table class="table table-striped">
+		<tr>
+			<th>Veranstaltungstitel</th>
+			<td><%= f.text_field :title, :value => @pattern.title + " (Kopie)" %></td>
+		</tr>
+		<tr>
+			<td><strong>Beschreibung</strong><br />
+				<em>Zeit, Ort, weitere Details</em>
+			</td>
+			<td><%= f.text_area :description, :value => @pattern.description %></td>
+		</tr>
+		<tr>
+			<td><strong>Maximale Teilnehmerzahl</strong><br />
+				<em>Falls keine Begrenzung: -1</em></td>
+			<td><%= f.number_field :max_registration_count, :value => @pattern.max_registration_count %></td>
+		</tr>
+		<tr>
+			<th>Anmeldeschluss</th>
+			<td><%= f.date_select :expiry, :value => @pattern.expiry %></td>
+		</tr> 
+	</table>
+
+
+    
   <!-- Questions -->
   <%= f.fields_for :questions, @event.questions do |q| %>
   	
@@ -73,8 +79,10 @@
 	<% end %>
 
   
-  <div class="actions">
-    <%= f.submit :class => "btn btn-primary"%>
+  <div class="actions" align="right">
+    <%= f.submit "Veranstaltung erstellen", :class => "btn btn-primary"%>
   </div>
 
 <% end %>
+
+</div>
