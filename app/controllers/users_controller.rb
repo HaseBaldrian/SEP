@@ -9,6 +9,7 @@ class UsersController < ApplicationController
     @users = User.order(:name)
     if session[:user_id] == 19
       @events = Event.order(:expiry)
+      @user = User.find_by_id(19)
     else
       @users.each do |user| 
         if user.id == session[:user_id] 

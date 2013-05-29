@@ -10,7 +10,7 @@
 		
 		<% @questions.each do |q| %>
 				<tr id=<%= q.id %>>
-		   			<td><a id=<%= "editquestion"+q.id.to_s %> href="#"><i class="icon-pencil"></i></a>
+		   			<td><a id=<%= "editquestion"+q.id.to_s %> href="#"><i class="icon-edit"></i></a>
 						<%= best_in_place q, :question, :path => user_event_question_path(q.event.user,q.event,q), :activator => "#editquestion"+q.id.to_s %>
 					</td>
 		   			<td><% if q.type == "BoolQuestion" %>
@@ -26,7 +26,7 @@
 							<%= best_in_place q, :options, :path => user_event_question_path(q.event.user,q.event,q), :activator => "#editoptions"+q.id.to_s, :type => :textarea %>
 						<% end %>
 		   			</td>
-		   			<td> <%= link_to '<i class="icon-remove-circle"></i>'.html_safe, 
+		   			<td> <%= link_to '<i class="icon-remove"></i>'.html_safe, 
 							user_event_question_path(@event.user_id, @event, q), 
 							confirm: 'Sicher??!', 
 	    					method: :delete, 
