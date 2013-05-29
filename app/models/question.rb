@@ -6,19 +6,4 @@ class Question < ActiveRecord::Base
   
   validates :question, :presence => true
   validates :position, :presence => true
-  
-  # in_place_edit_for :question, :option1, :option2, :options
-  
-  before_update :clear_empty_lines
-  
-  def clear_empty_lines
-    if self.options
-      # TODO leere zeilen löschen
-      # self.options.each_lines do |l|
-        # if l.strip.blank? # heißt: ist leerzeile
-          # #... 
-        # end
-      # end
-    end
-  end
 end

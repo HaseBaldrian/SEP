@@ -23,9 +23,8 @@
 		   				<% end %> 
 						
 						<% if q.type == "OptQuestion"  %>
-							<% q.options.each_line do |l| %>
-								<%= l %> <br />
-							<% end %>
+							<a id=<%= "editoptions"+q.id.to_s %> href="#"><i class="icon-pencil"></i></a>
+							<%= best_in_place q, :options, :path => user_event_question_path(q.event.user,q.event,q), :activator => "#editoptions"+q.id.to_s, :type => :textarea %>
 						<% end %>
 		   			</td>
 		   			<td> <%= link_to 'löschen', 

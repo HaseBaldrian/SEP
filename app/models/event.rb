@@ -7,10 +7,7 @@ class Event < ActiveRecord::Base
   validates :description, :presence => true
   
   accepts_nested_attributes_for :questions, :allow_destroy => true
-  # accepts_nested_attributes_for :text_questions, :allow_destroy => true
-  # accepts_nested_attributes_for :bool_questions, :allow_destroy => true
-  # accepts_nested_attributes_for :opt_questions, :allow_destroy => true
-  
+
   
   before_update :default_values
   before_update :link_matching
