@@ -11,24 +11,27 @@
       </ul>
     </div>
   <% end %>
+  
+  	<table class="table table-striped">
+		<tr>
+			<td><%= f.label :name, "Benutzername" %></td>
+			<td><%= f.text_field :name %></td>
+		</tr>
+		<tr>
+			<td><%= f.label :password, "Passwort" %></td>
+			<td><%= f.password_field :password %></td>
+		</tr>
+		<tr>
+			<td><%= f.label :password_confirmation, "Passwort bestätigen" %></td>
+			<td><%= f.password_field :password_confirmation %></td>
+		</tr>
+		<tr>
+			<td><%= f.label :email, "Email" %></td>
+			<td><%= f.text_field :email %></td>
+		</tr>
+	</table>
 
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :password, 'Password' %><br />
-    <%= f.password_field :password %>
-  </div>
-  <div class="field">
-    <%= f.label :password_confirmation, 'Confirm' %><br />
-    <%= f.password_field :password_confirmation %>
-  </div>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.text_field :email %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="actions" align="right">
+    <%= f.submit "Speichern", :class => "btn btn-primary" %>
   </div>
 <% end %>
