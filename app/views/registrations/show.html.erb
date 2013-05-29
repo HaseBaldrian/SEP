@@ -27,7 +27,11 @@
 	<% @answers.each do |a| %>
 	<tr>
 		<th><%= a.question.question %></th>
-		<td><%= a.input %></td>
+		<% if a.type == "OptAnswer" %>
+			<td><%= a.to_html.html_safe %></td>
+		<% else %>
+			<td><%= a.input %></td>
+		<%end %>
 	</tr>
 	<% end %> 
 	

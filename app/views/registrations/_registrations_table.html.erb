@@ -26,7 +26,11 @@
 	  		<% @answers = @answers.sort_by{ |q| q.position.to_i }%>
 	  		
 	  		<% @answers.each do |a| %>
-	  			<td><%= a.input %></td>
+	  			<% if a.type == "OptAnswer" %>
+	  				<td><%= a.to_html.html_safe %></td>
+	  			<% else %>
+	  				<td><%= a.input %></td>
+	  			<%end %>
 	  		<% end %>
 	  		<td><%= link_to 'Anmeldung löschen', user_event_registration_path(r.event.user, r.event, r), 
 							confirm: "Anmeldung wirklich löschen? \nACHTUNG: Alle Daten sind dann weg!", 

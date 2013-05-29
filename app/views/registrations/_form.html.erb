@@ -16,13 +16,6 @@
 			<td></th><%= f.label :email, "Email: " %></td>
 			<td><%= f.text_field :email %></td>
 		</tr>
-			
-	
-
-  <!-- <div>
-    <%= f.label :email, "Email: ", :style => "display:inline" %>
-    <%= f.text_field :email %>
-  </div> -->
   
   
   	<%= f.fields_for :answers, @registration.answers do |a| %>	
