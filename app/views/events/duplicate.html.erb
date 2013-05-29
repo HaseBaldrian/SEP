@@ -14,7 +14,7 @@
 
   <div class="field">
     <%= f.label :title %><br />
-    <%= f.text_field :title, :value => @pattern.title %>
+    <%= f.text_field :title, :value => @pattern.title + " (Kopie)" %>
   </div>
   <div class="field">
     <%= f.label :description %><br />
@@ -37,12 +37,10 @@
   <%= f.fields_for :questions, @event.questions do |q| %>
   	
 		<div class="field">
-			<%= q.label :question %>
-			<%= q.text_field :question %>
+			<%= q.hidden_field :question %>
 		</div>
 		<div class="field">
-			<%= q.label :position %>
-			<%= q.text_field :position %>
+			<%= q.hidden_field :position %>
 		</div> 
 		
 		<% if @question_types[q.object.position] == "TextQuestion" %>
@@ -53,12 +51,10 @@
 		 	 
 		<% if @question_types[q.object.position] == "BoolQuestion" %>
 			<div class="field">
-				<%= q.label :option1 %>
-				<%= q.text_field :option1 %>
+				<%= q.hidden_field :option1 %>
 		 	</div>
 			<div class="field">
-				<%= q.label :option2 %>
-				<%= q.text_field :option2 %>
+				<%= q.hidden_field :option2 %>
 		 	</div>
 		 	<div class="field">
 				<%= q.hidden_field :type, :value => "BoolQuestion" %>
@@ -67,8 +63,7 @@
 		
 		<% if @question_types[q.object.position] == "OptQuestion" %>
 		 	<div class="field">
-				<%= q.label :options %>
-				<%= q.text_area :options %>
+				<%= q.hidden_field :options %>
 		 	</div>
 		 	<div class="field">
 				<%= q.hidden_field :type, :value => "OptQuestion" %>
