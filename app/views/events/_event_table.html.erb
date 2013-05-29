@@ -1,0 +1,36 @@
+<dl class="dl-horizontal" id="event_table">
+	<dt>Titel</dt>
+	<dd><a id="edittitle" href="#"><i class="icon-pencil"></i></a>
+		<%= best_in_place @event, :title, :path => user_event_path, :activator => "#edittitle" %>
+	</dd>
+	<dt>Beschreibung</dt>
+	<dd><a id="editdescription" href="#"><i class="icon-pencil"></i></a>
+		<%= best_in_place @event, :description, :path => user_event_path, :activator => "#editdescription", :type => :textarea %>			
+	</dd>
+	<dt>Anmeldelink</dt>
+	<dd>http://localhost:3000/anmeldung/<%= @event.link %></dd>
+	<dt>Anmeldung
+	</dt>
+	<dd><% if @event.locked %>
+			<div class="text-error"><strong>GESPERRT</strong></div>
+			<%= link_to "freischalten", user_event_invert_locked_path(@user,@event), :class => "btn"#, :remote => true 
+			%>
+		<% else %>
+			<div class="text-success"><strong>GEÖFFNET</strong></div>
+			<%= link_to "schließen", user_event_invert_locked_path(@user,@event), :class => "btn"#, :remote => true 
+			%>
+		<% end %>
+	</dd>
+	<dt>Anmeldungen</dt>
+	<dd><%= @event.registrations.count %></dd>
+	<dt>Max. Teilnehmerzahl</dt>
+	<dd><a id="editmaxregistrationcount" href="#"><i class="icon-pencil"></i></a>
+		<%= best_in_place @event, :max_registration_count, :path => user_event_path, :activator => "#editmaxregistrationcount" %>
+    </dd>
+	<dt>Anmeldeschluss</dt>	
+	<dd><a id="editexpiry" href="#"><i class="icon-pencil"></i></a>
+		<%= best_in_place @event, :expiry, :path => user_event_path, :activator => "#editexpiry", :type => :date %>
+	</dd>
+	<dt>Erstellt von</dt>
+	<dd><%= User.find(@event.user_id).name %></dd>
+</dl>

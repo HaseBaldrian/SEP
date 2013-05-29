@@ -117,6 +117,22 @@ class EventsController < ApplicationController
       end
     end
   end
+  
+  def invert_locked
+    @event = Event.find(params[:event_id])
+    @user = @event.user_id 
+    
+    if @event.locked
+      @event.update_attributes(:locked => false)
+    else
+      @event.update_attributes(:locked => true)
+    end
+
+    respond_to do |format|
+      format.html { redirect_to user_event_path(@user, @event) }
+      #format.js
+    end
+  end
 
   # DELETE /events/1
   # DELETE /events/1.json
@@ -154,7 +170,6 @@ class EventsController < ApplicationController
         @question_types[pq.position] = pq.type
     end
 
-    
     respond_to do |format|
       format.html
     end

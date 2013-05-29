@@ -8,12 +8,15 @@ class Event < ActiveRecord::Base
   
   accepts_nested_attributes_for :questions, :allow_destroy => true
 
-  
+  before_create :default_locked
   before_update :default_values
   before_update :link_matching
   
+  def default_locked
+    self.locked = true
+  end
+  
   def default_values
-    self.locked ||= false
     self.max_registration_count ||= -1
     self.questions_count ||= 0
   end
