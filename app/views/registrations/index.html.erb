@@ -6,4 +6,6 @@
 		<%= render "registrations_table" %>
 	</div>
 	
-	<%= link_to "Export as CSV", user_event_registrations_path(format: "csv") %>
+	<div align="right">
+	<%= link_to "Als CSV exportieren (ohne Warteliste)", user_event_registrations_path(format: "csv") %>
+	</div>

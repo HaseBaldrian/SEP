@@ -27,12 +27,14 @@ class Registration < ActiveRecord::Base
     
     CSV.generate do |csv|
       csv << firstline
-      registrations.each do |registration|
-        inputs = ["\'" + registration.email+ "\'"]
-        answers = registration.answers
+      i=0
+      registrations[0].event.max_registration_count.times do 
+        inputs = ["\'" + registrations[i].email+ "\'"]
+        answers = registrations[i].answers
         answers.each do |answer|
           inputs << "\'" + answer.input+ "\'"
         end        
+        i+=1
         csv << inputs
       end 
     end
