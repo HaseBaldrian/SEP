@@ -1,22 +1,21 @@
 <p id="notice"><%= notice %></p>
 
 <div class="well">
+	
+	<h4 align="right">Profil von <%= @user.name%></h4>
+	<br />
+	
 <table class="table">
 	<tr>
-		<th>Name</th>
-		<th>Email</th>
-		<th>ID</th>
+		<th>Username</th>
+		<td><%= @user.name %></td>
 	</tr>
 	
 	<tr>
-		<th><%= best_in_place @user, :name, :activator => "#editname" %>
-			<a id="editname" href="#"><i class="icon-pencil"></i></a>
-		</th>
-		<th><%= best_in_place @user, :email, :activator => "#editmail" %>
-			<a id="editmail" href="#"><i class="icon-pencil"></i></a> </th>
-		<th><%= @user.id %></th>
+		<th>Email</th>
+		<td><%= @user.email %></td>
 	</tr>
-	
 </table>
+
 </div>
 

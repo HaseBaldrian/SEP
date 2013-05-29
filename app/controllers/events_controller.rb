@@ -3,14 +3,36 @@ class EventsController < ApplicationController
   skip_before_filter :authorize
   skip_before_filter :authorize2
   
-  #in_place_edit_for :event, :title
-  
-# wird nirgends(?) verwendet  
-#  def count
-#    @event = Event.find(params[:id])
-#    return @event.text_questions.count + @event.bool_questions.count + @event.opt_quesions.count
-#  end
+  def index
+    @users = User.all
+    if session[:user_id] == 19
+      @events = Event.order(:expiry)
+      @user = User.find_by_id(19)
+    else
+      @users.each do |user| 
+        if user.id == session[:user_id] 
+        @user = user
+        @events = @user.events
+        end 
+      end
+    end
+    
+    # update locked
+    if @events   
+      @events.each do |event|
+        event.update_attribute(:locked, true)  if event.expiry < Date.today 
+      end
+    end
 
+  respond_to  do  |format|
+      unless session[:user_id] 
+        format.html { redirect_to login_path, notice: 'Please login.' }
+      else
+        format.html # index.html.erb
+      end
+    end
+  end
+  
   # GET /events/1
   # GET /events/1.json
   def show

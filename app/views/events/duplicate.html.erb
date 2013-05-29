@@ -1,6 +1,6 @@
-<h1>Veranstaltung kopieren: <%= @pattern.title %></h1>
-
 <div class="well">
+	<h4 align="right">Veranstaltung kopieren: <%= @pattern.title %></h4>
+	<br />
 
 <%= form_for([@user, @event], :url => url_for(:controller => 'events', :action => 'create_double')) do |f| %>
 	  <% if @event.errors.any? %>

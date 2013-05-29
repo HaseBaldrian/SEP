@@ -1,6 +1,6 @@
 Loginsystem::Application.routes.draw do
 
-  match "admin" => 'admin#index'
+  #match "admin" => 'admin#index'
 
   controller :sessions do
     get 'login' => :new

@@ -2,7 +2,7 @@
 
   	<ul class="nav">
   		 <li>
-		    <%= link_to "Veranstaltungsübersicht", users_path %> 
+		    <%= link_to "Veranstaltungsübersicht", user_events_path(session[:user_id]) %> 
 		 </li>
 		 <li class="divider-vertical"></li>
 		 <li> 	
@@ -11,7 +11,7 @@
 		 <% if session[:user_id] == 19 %>
 		 <li class="divider-vertical"></li>
 		 <li>		    
-		    <%= link_to "User bearbeiten", admin_path %>		  
+		    <%= link_to "Userübersicht", users_path %>		  
 		 </li>
 		 <% end %>
 		 <li class="divider-vertical"></li>

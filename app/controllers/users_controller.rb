@@ -7,27 +7,9 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.order(:name)
-    if session[:user_id] == 19
-      @events = Event.order(:expiry)
-      @user = User.find_by_id(19)
-    else
-      @users.each do |user| 
-        if user.id == session[:user_id] 
-        @user = user
-        @events = @user.events
-        end 
-      end
-    end
-    
-    # update locked
-    if @events   
-      @events.each do |event|
-        event.update_attribute(:locked, true)  if event.expiry < Date.today 
-      end
-    end
 
   respond_to  do  |format|
-      unless session[:user_id] 
+      unless session[:user_id] == 19
         format.html { redirect_to login_path, notice: 'Please login.' }
       else
         format.html # index.html.erb
@@ -84,7 +66,8 @@ class UsersController < ApplicationController
         #Notifier.registration_received(@user).deliver
         format.html { redirect_to users_url, notice: 'User ' + @user.name + ' was successfully created.' }
       else
-        format.html { render action: "new" }      end
+        format.html { render action: "new" }      
+      end
     end
   end
 
@@ -95,11 +78,9 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
-        format.html { redirect_to users_url, notice: 'User was successfully updated.' }
-        format.json { respond_with_bip(@user) }
+        format.html { redirect_to user_url(@user), notice: 'User was successfully updated.' }
       else
         format.html { render action: "edit" }
-        format.json { respond_with_bip(@user) }
       end
     end
   end
