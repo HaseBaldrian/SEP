@@ -28,9 +28,9 @@
 		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
 			<li><%= link_to "Logout", logout_path, :method => :delete, :class => "btn"%></li>
 			<li><%= link_to "Edit Profile", edit_user_path(session[:user_id]), :class => "btn" %></li>
-			<li><%= link_to "Eventlist", users_path, :class => "btn" %> </li>
+			<li><%= link_to "Eventlist", user_events_path(session[:user_id]), :class => "btn" %> </li>
 			<% if session[:user_id] == 19 %>
-		    	<li><%= link_to "Administrate Users", admin_path, :class => "btn" %></li>
+		    	<li><%= link_to "Administrate Users", users_path, :class => "btn" %></li>
 		    <% end %>
 		</ul>
 	</div>

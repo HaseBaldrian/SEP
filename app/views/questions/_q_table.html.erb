@@ -11,19 +11,19 @@
 		<% @questions.each do |q| %>
 				<tr id=<%= q.id %>>
 		   			<td><a id=<%= "editquestion"+q.id.to_s %> href="#"><i class="icon-edit"></i></a>
-						<%= best_in_place q, :question, :path => user_event_question_path(q.event.user,q.event,q), :activator => "#editquestion"+q.id.to_s %>
+						<%= best_in_place q, :question, :path => user_event_question_path(q.event.user,q.event,q), :activator => "#editquestion"+q.id.to_s, :ok_button => "Speichern" %>
 					</td>
 		   			<td><% if q.type == "BoolQuestion" %>
 			   				<a id=<%= "editoption1"+q.id.to_s %> href="#"><i class="icon-pencil"></i></a>
-			   				<%= best_in_place q, :option1, :path =>  user_event_question_path(q.event.user,q.event,q), :activator => "#editoption1"+q.id.to_s %> <br />
+			   				<%= best_in_place q, :option1, :path =>  user_event_question_path(q.event.user,q.event,q), :activator => "#editoption1"+q.id.to_s, :ok_button => "Speichern" %> <br />
 			   				<a id=<%= "editoption2"+q.id.to_s %> href="#"><i class="icon-pencil"></i></a>
-			   				<%= best_in_place q, :option2, :path =>  user_event_question_path(q.event.user,q.event,q), :activator => "#editoption2"+q.id.to_s %> 
+			   				<%= best_in_place q, :option2, :path =>  user_event_question_path(q.event.user,q.event,q), :activator => "#editoption2"+q.id.to_s, :ok_button => "Speichern" %> 
 			   				
 		   				<% end %> 
 						
 						<% if q.type == "OptQuestion"  %>
 							<a id=<%= "editoptions"+q.id.to_s %> href="#"><i class="icon-pencil"></i></a>
-							<%= best_in_place q, :options, :path => user_event_question_path(q.event.user,q.event,q), :activator => "#editoptions"+q.id.to_s, :type => :textarea %>
+							<%= best_in_place q, :options, :path => user_event_question_path(q.event.user,q.event,q), :activator => "#editoptions"+q.id.to_s, :type => :textarea, :ok_button => "Speichern", :display_with => :simple_format %> 
 						<% end %>
 		   			</td>
 		   			<td> <%= link_to '<i class="icon-remove"></i>'.html_safe, 
