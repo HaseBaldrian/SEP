@@ -183,6 +183,15 @@ class EventsController < ApplicationController
       format.js
     end
   end
+  
+  def refresh_questions
+    @event = Event.find(params[:event_id])
+    @questions = @event.questions.all(:order => 'position')
+    
+    respond_to do |format|
+      format.js
+    end
+  end
 
   # DELETE /events/1
   # DELETE /events/1.json

@@ -102,6 +102,12 @@
 		<div id="tq_table">
 			<%= render "questions/q_table" %>
 		</div>
+		<div align="right">
+			<%= link_to '<i class="icon-refresh"></i>'.html_safe,
+					user_event_refresh_questions_path(@event.user_id, @event),
+					:remote => true
+			%>
+		 </div>
 	</div>
 	
 </div>

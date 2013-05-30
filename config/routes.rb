@@ -12,6 +12,7 @@ Loginsystem::Application.routes.draw do
       get 'duplicate' => :duplicate
       post 'duplicate' => :create_double
       get 'invert_locked' => :invert_locked
+      get 'refresh_questions' => :refresh_questions
       resources :questions do
         resources :text_questions, :bool_questions, :opt_questions
         get 'position_down' => :position_down
