@@ -23,7 +23,7 @@
 	<dd><%= @event.max_registration_count %>
     </dd>
 	<dt>Anmeldeschluss</dt>	
-	<dd><%= @event.expiry %>
+	<dd><%= @event.expiry.strftime('%d.%m.%Y')%>
 	</dd>
 	<dt>Erstellt von</dt>
 	<dd><%= User.find(@event.user_id).name %></dd>
