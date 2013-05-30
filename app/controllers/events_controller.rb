@@ -98,6 +98,10 @@ class EventsController < ApplicationController
     
     respond_to do |format|
       if @event.save
+        
+        # Infomail mit Anmeldelink an event.user
+        Notifier.event_created(@event).deliver
+        
         format.html { redirect_to user_event_path(@user, @event), notice: 'Veranstaltung erstellt.' }
       else
         format.html { render action: "new" }
@@ -146,6 +150,10 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.save
+        
+        # Infomail mit Anmeldelink an event.user
+        Notifier.event_created(@event).deliver
+        
         format.html { redirect_to user_event_path(@user, @event), notice: 'Veranstaltung erstellt.' }
       else
         format.html { render action: "duplicate" }

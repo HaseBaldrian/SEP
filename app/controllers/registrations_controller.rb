@@ -65,7 +65,20 @@ class RegistrationsController < ApplicationController
     end 
         
     respond_to do |format|
-      if @registration.save   
+      if @registration.save
+        
+        # falls der letzte Platz belegt wurde: Infomail an @event.user
+        if @event.registrations.all.count == @event.max_registration_count
+          Notifier.event_taken(@event).deliver
+        end
+        
+        # Email: Bestaetigung Eingang der Anmeldung
+        if waitlist(@registration) # Wartelistenplatz
+          Notifier.registration_received_waitlist(@registration).deliver
+        else # Anmeldebestaetigung
+          Notifier.registration_received(@registration).deliver
+        end
+        
         format.html { redirect_to user_event_registration_path(@user, @event, @registration), notice: 'Anmeldung erfolgreich.' }
         format.js #??
       else
@@ -79,15 +92,7 @@ class RegistrationsController < ApplicationController
     @event = Event.find(params[:event_id])
     @registration = Registration.find(params[:id])
     
-    @waitlist = false
-    @registrations = @event.registrations.find(:all, :order => 'created_at') 
-    i=0
-    @registrations.each do |r|
-      if @registrations[i] == @registration && i>=@event.max_registration_count
-        @waitlist = true
-      end
-      i+=1
-    end
+    @waitlist = waitlist(@registration)
     
             # answers nach position sortieren
     @answers = @registration.answers
@@ -118,15 +123,7 @@ class RegistrationsController < ApplicationController
     @event = Event.find(params[:event_id])
     @registration = Registration.find(params[:id])
     
-    @waitlist = false
-    @registrations = @event.registrations.find(:all, :order => 'created_at') 
-    i=0
-    @registrations.each do |r|
-      if @registrations[i] == @registration && i>=@event.max_registration_count
-        @waitlist = true
-      end
-      i+=1
-    end
+    @waitlist = waitlist(@registration)
        
     respond_to do |format|
       format.html
@@ -165,13 +162,17 @@ def update
     @registration = Registration.find(params[:id])
     registrations = @event.registrations
     @id = @registration.id
+    email = @registration.email 
     
-        # TODO information an nachrücker
-    if registrations[@event.max_registration_count] != nil &&  @event.max_registration_count != -1 
-      logger.info "Infomail an: " + registrations[@event.max_registration_count].inspect
-    end
-
     @registration.destroy
+    
+        # Information an Nachruecker
+    if registrations[@event.max_registration_count] != nil &&  @event.max_registration_count != -1 
+      Notifier.registration_move_up(registrations[@event.max_registration_count]).deliver
+    end
+      # Abmeldebestaetigung
+    Notifier.registration_cancelled(@event,email).deliver
+    
     
     respond_to do |format|
       unless session[:user_id] 
@@ -241,5 +242,21 @@ def update
       i+=1
     end 
     return answers_params
+  end
+  
+  def waitlist registration
+    event = registration.event
+    waitlist = false
+    registrations = event.registrations.find(:all, :order => 'created_at') 
+    if event.max_registration_count > -1
+      i=0
+      registrations.count.times do 
+        if registrations[i] == registration && i>=event.max_registration_count
+          waitlist = true
+        end
+        i+=1
+      end
+    end
+    return waitlist
   end
 end
