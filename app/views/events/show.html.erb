@@ -7,10 +7,10 @@
 	
 		<%= render 'event_table' %>
 	
-	<!-- TODO editieren-link -->
 	<%= link_to "Veranstaltung duplizieren", user_event_duplicate_path(@user,@event) %> |
 	<%= link_to "Alle Anmeldungen", user_event_registrations_path(@user,@event) %> |
-	<%= link_to "Löschen", user_event_path(@user, @event), confirm: 'Sicher?!', 
+	<%= link_to "Bearbeiten", edit_user_event_path(@user,@event) %> |
+	<%= link_to "Löschen", user_event_path(@user, @event), confirm: 'Veranstaltung '+@event.title+' unwiederbringlich löschen?', 
 	    								method: :delete %>
 	
 	</div>

@@ -183,7 +183,7 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to user_event_path(@user, @event) }
-      #format.js
+      format.js
     end
   end
 
