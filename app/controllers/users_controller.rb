@@ -10,7 +10,7 @@ class UsersController < ApplicationController
 
   respond_to  do  |format|
       unless session[:user_id] == 19
-        format.html { redirect_to login_path, notice: 'Please login.' }
+        format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }
       else
         format.html # index.html.erb
       end
@@ -24,7 +24,7 @@ class UsersController < ApplicationController
 
     respond_to  do  |format|
       unless session[:user_id] == 19 || @user.id == session[:user_id] 
-        format.html { redirect_to users_path, notice: 'Please login as Admin to watch profiles that are not yours.' }
+        format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }      
       else
         format.html # show.html.erb
       end
@@ -46,7 +46,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     respond_to do |format|
       unless session[:user_id] == 19 || @user.id == session[:user_id] 
-        format.html { redirect_to  users_path, notice: 'Please login as Admin to edit profiles that are not yours.'}
+        format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }
       else 
         format.html
       end

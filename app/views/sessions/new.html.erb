@@ -5,17 +5,17 @@
 	
 	<%= form_tag do %>
 		<fieldset>
-			<legend>Please Log In</legend>
+			<legend>Anmelden</legend>
 		<div>
 			<label for="name" >Name:</label>
 			<%= text_field_tag :name, params[:name] %>
 		</div>
 		<div>
-			<label for="password" >Password:</label>
+			<label for="password" >Passwort:</label>
 			<%= password_field_tag :password, params[:password] %>
 		</div>
 		<div>
-			<%= submit_tag "Login", :class => "btn btn-primary" %>
+			<%= submit_tag "Los geht's! Viel Spaß!", :class => "btn btn-primary" %>
 		</div>
 		</fieldset>
 	<% end %>

@@ -102,7 +102,6 @@ class RegistrationsController < ApplicationController
     @user = User.find(params[:user_id])
     @event = Event.find(params[:event_id])
     @registrations = @event.registrations.find(:all, :order => 'created_at') 
-        #TODO sort by something? aktuell erstellungsdatum
     
     @questions = @event.questions
       #questions nach position sortieren    

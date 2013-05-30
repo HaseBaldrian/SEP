@@ -26,7 +26,7 @@ class EventsController < ApplicationController
 
   respond_to  do  |format|
       unless session[:user_id] 
-        format.html { redirect_to login_path, notice: 'Please login.' }
+        format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }
       else
         format.html # index.html.erb
       end
@@ -54,7 +54,7 @@ class EventsController < ApplicationController
 
     respond_to  do  |format|
       unless session[:user_id] == 19 || @user.id == session[:user_id] 
-        format.html { redirect_to users_path, notice: 'Please login as Admin to watch events that are not yours.' }
+        format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }
       else
         format.html # show.html.erb
       end
@@ -69,7 +69,7 @@ class EventsController < ApplicationController
 
     respond_to  do  |format|
       unless session[:user_id]
-        format.html { redirect_to login_path, notice: 'Please login to create events.' }
+        format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }
       else
         format.html # new.html.erb
       end
@@ -81,10 +81,9 @@ class EventsController < ApplicationController
     @event = Event.find(params[:id])
     @user = User.find(params[:user_id])
     
-  respond_to do |format|
+    respond_to do |format|
       unless session[:user_id] == 19 || @user.id == session[:user_id] 
-        format.js { render :text => "alert('no entry!')" }
-        format.html { redirect_to  users_path, notice: 'Please login as Admin to edit events that are not yours.'}
+        format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }  
       else 
         format.html
       end
@@ -163,10 +162,8 @@ class EventsController < ApplicationController
     respond_to do |format|
       if @event.update_attributes(params[:event])
         format.html { redirect_to user_event_path(@user, @event), notice: 'Event was successfully updated.' }
-        format.json { respond_with_bip(@event) }
       else
         format.html { render action: "edit" }
-        format.json { respond_with_bip(@event) }
       end
     end
   end
@@ -194,10 +191,14 @@ class EventsController < ApplicationController
     @id = @event.id
     @user = @event.user_id 
     @event.destroy
-
+    
     respond_to do |format|
-      format.html { redirect_to users_path }
-      format.js   #destroy.js.erb
+      unless session[:user_id] == 19 || @user.id == session[:user_id] 
+        format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }  
+      else 
+        format.html { redirect_to users_path }
+        format.js   #destroy.js.erb
+      end
     end
   end
   
