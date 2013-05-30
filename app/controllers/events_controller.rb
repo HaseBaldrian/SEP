@@ -98,7 +98,7 @@ class EventsController < ApplicationController
     
     respond_to do |format|
       if @event.save
-        format.html { redirect_to user_event_path(@user, @event), notice: 'Event was successfully created.' }
+        format.html { redirect_to user_event_path(@user, @event), notice: 'Veranstaltung erstellt.' }
       else
         format.html { render action: "new" }
       end
@@ -146,7 +146,7 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.save
-        format.html { redirect_to user_event_path(@user, @event), notice: 'Event was successfully created.' }
+        format.html { redirect_to user_event_path(@user, @event), notice: 'Veranstaltung erstellt.' }
       else
         format.html { render action: "duplicate" }
       end
@@ -161,7 +161,7 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.update_attributes(params[:event])
-        format.html { redirect_to user_event_path(@user, @event), notice: 'Event was successfully updated.' }
+        format.html { redirect_to user_event_path(@user, @event), notice: 'Aenderungen eingetragen.' }
       else
         format.html { render action: "edit" }
       end
@@ -196,7 +196,7 @@ class EventsController < ApplicationController
       unless session[:user_id] == 19 || @user.id == session[:user_id] 
         format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }  
       else 
-        format.html { redirect_to users_path }
+        format.html { redirect_to users_path, notice: 'Veranstaltung geloescht.' }
         format.js   #destroy.js.erb
       end
     end

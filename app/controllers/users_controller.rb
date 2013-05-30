@@ -64,7 +64,7 @@ class UsersController < ApplicationController
         session[:user_id] = @user.id
         
         #Notifier.registration_received(@user).deliver
-        format.html { redirect_to users_url, notice: 'User ' + @user.name + ' was successfully created.' }
+        format.html { redirect_to users_url, notice: 'User ' + @user.name + ' erfolgreich erstellt.' }
       else
         format.html { render action: "new" }      
       end
@@ -78,7 +78,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
-        format.html { redirect_to user_url(@user), notice: 'User was successfully updated.' }
+        format.html { redirect_to user_url(@user), notice: 'Userdaten erfolgreich geaendert.' }
       else
         format.html { render action: "edit" }
       end
@@ -93,7 +93,7 @@ class UsersController < ApplicationController
     @user.destroy
 
     respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully deleted.' }
+      format.html { redirect_to users_url, notice: 'User geloescht.' }
       format.js #destroy.js.erb
     end
   end

@@ -66,7 +66,7 @@ class RegistrationsController < ApplicationController
         
     respond_to do |format|
       if @registration.save   
-        format.html { redirect_to user_event_registration_path(@user, @event, @registration), notice: 'Registration was successfully created.' }
+        format.html { redirect_to user_event_registration_path(@user, @event, @registration), notice: 'Anmeldung erfolgreich.' }
         format.js #??
       else
         format.html { render action: "new" }
@@ -152,7 +152,7 @@ def update
 
     respond_to do |format|
       if @registration.update_attributes(params[:registration])    
-        format.html { redirect_to user_event_registration_path(@user, @event, @registration), notice: 'Registration was successfully updated.' }
+        format.html { redirect_to user_event_registration_path(@user, @event, @registration), notice: 'Aenderungen erfolgreich eingetragen.' }
       else
         format.html { render action: "edit" }
       end
@@ -175,7 +175,7 @@ def update
     
     respond_to do |format|
       unless session[:user_id] 
-        format.html { redirect_to new_user_event_registration_path(@user,@event), notice: 'Registration was successfully deleted.' } 
+        format.html { redirect_to new_user_event_registration_path(@user,@event), notice: 'Abmeldung erfolgreich.' } 
       else
         format.html { redirect_to user_event_registrations_path(@user,@event) }
         format.js 
