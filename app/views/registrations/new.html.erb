@@ -8,7 +8,7 @@
 
 <div class="well">
 <% if @event.expiry < Date.today  || @event.locked %>
-	<div class="alert alert-error"><h3>Anmeldung leider bereits geschlossen!</h3></div>
+	<div class="alert alert-error"><h3>Anmeldung geschlossen!</h3></div>
 
 <% elsif @event.registrations.count >= @event.max_registration_count && @event.max_registration_count > 0 %>
 	

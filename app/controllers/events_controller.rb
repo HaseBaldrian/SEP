@@ -5,7 +5,7 @@ class EventsController < ApplicationController
   
   def index
     @users = User.all
-    if session[:user_id] == 19
+    if session[:user_id] == 1
       @events = Event.order(:expiry)
       @user = User.find_by_id(19)
     else
@@ -53,7 +53,7 @@ class EventsController < ApplicationController
     end
 
     respond_to  do  |format|
-      unless session[:user_id] == 19 || @user.id == session[:user_id] 
+      unless session[:user_id] == 1 || @user.id == session[:user_id] 
         format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }
       else
         format.html # show.html.erb
@@ -82,7 +82,7 @@ class EventsController < ApplicationController
     @user = User.find(params[:user_id])
     
     respond_to do |format|
-      unless session[:user_id] == 19 || @user.id == session[:user_id] 
+      unless session[:user_id] == 1 || @user.id == session[:user_id] 
         format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }  
       else 
         format.html
@@ -193,7 +193,7 @@ class EventsController < ApplicationController
     @event.destroy
     
     respond_to do |format|
-      unless session[:user_id] == 19 || @user.id == session[:user_id] 
+      unless session[:user_id] == 1 || @user.id == session[:user_id] 
         format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }  
       else 
         format.html { redirect_to users_path, notice: 'Veranstaltung geloescht.' }

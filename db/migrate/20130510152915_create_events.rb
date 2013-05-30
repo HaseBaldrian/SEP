@@ -5,11 +5,14 @@ class CreateEvents < ActiveRecord::Migration
       t.text :description
       t.string :link
       t.boolean :locked
-      t.integer :registration_count
+      t.integer :questions_count
       t.integer :max_registration_count
       t.date :expiry
+      t.references :user
 
       t.timestamps
     end
+    
+    add_index :events, :user_id
   end
 end

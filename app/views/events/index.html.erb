@@ -1,15 +1,14 @@
 <% if session[:user_id] %>
-	<% if session[:user_id] == 19 %>
-		<h2>Alle Veranstaltungen</h2>
-	<% else %>
-		<h2>Deine Veranstaltungen</h2>
-	<% end %>
-			
-		<% if notice %>
-			<p id="notice" ><%= notice %></p>
-		<% end %>
 		
 <div class="well">		
+	
+	<% if session[:user_id] == 1 %>
+		<h4 align="right">Alle Veranstaltungen</h4>
+	<% else %>
+		<h4 align="right">Deine Veranstaltungen</h4>
+	<% end %>
+	<br />
+	
 	<table class="table table-striped">
   <tr>
     <th>Titel</th>
@@ -19,7 +18,7 @@
     <th>Anmeldungen</th>
     <th>Max. Teilnehmerzahl</th>
     <th>Anmeldeschluss</th>
-    <% if session[:user_id] == 19 %>
+    <% if session[:user_id] == 1 %>
     	<th>Erstellt von</th>
     <% end %>
     <th></th>
@@ -43,7 +42,7 @@
 	    		<%= event.max_registration_count %>
 	    	<% end %></td>
 	    <td><%= event.expiry.strftime('%d.%m.%Y') %></td>
-	    <% if session[:user_id] == 19 %>
+	    <% if session[:user_id] == 1 %>
 	    	<td><%= User.find(user).name %></td>
 	    <% end %>
 	    <td><%= link_to '<i class="icon-zoom-in"></i>'.html_safe, user_event_path(user, event) %><br>

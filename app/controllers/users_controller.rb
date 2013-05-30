@@ -9,7 +9,7 @@ class UsersController < ApplicationController
     @users = User.order(:name)
 
   respond_to  do  |format|
-      unless session[:user_id] == 19
+      unless session[:user_id] == 1
         format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }
       else
         format.html # index.html.erb
@@ -23,7 +23,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
 
     respond_to  do  |format|
-      unless session[:user_id] == 19 || @user.id == session[:user_id] 
+      unless session[:user_id] == 1 || @user.id == session[:user_id] 
         format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }      
       else
         format.html # show.html.erb
@@ -45,7 +45,7 @@ class UsersController < ApplicationController
   def edit
     @user = User.find(params[:id])
     respond_to do |format|
-      unless session[:user_id] == 19 || @user.id == session[:user_id] 
+      unless session[:user_id] == 1 || @user.id == session[:user_id] 
         format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }
       else 
         format.html

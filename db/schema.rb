@@ -26,24 +26,6 @@ ActiveRecord::Schema.define(:version => 20130524093241) do
   add_index "answers", ["question_id"], :name => "index_answers_on_question_id"
   add_index "answers", ["registration_id"], :name => "index_answers_on_registration_id"
 
-  create_table "bool_question_regs", :force => true do |t|
-    t.string   "input"
-    t.integer  "registration_id"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
-    t.integer  "bool_question_id"
-    t.integer  "position"
-  end
-
-  add_index "bool_question_regs", ["registration_id"], :name => "index_bool_question_regs_on_registration_id"
-
-  create_table "bool_questions", :force => true do |t|
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.string   "option1"
-    t.string   "option2"
-  end
-
   create_table "events", :force => true do |t|
     t.string   "title"
     t.text     "description"
@@ -58,24 +40,6 @@ ActiveRecord::Schema.define(:version => 20130524093241) do
   end
 
   add_index "events", ["user_id"], :name => "index_events_on_user_id"
-
-  create_table "opt_question_regs", :force => true do |t|
-    t.string   "input"
-    t.integer  "registration_id"
-    t.integer  "opt_question_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-    t.integer  "position"
-  end
-
-  add_index "opt_question_regs", ["opt_question_id"], :name => "index_opt_question_regs_on_opt_question_id"
-  add_index "opt_question_regs", ["registration_id"], :name => "index_opt_question_regs_on_registration_id"
-
-  create_table "opt_questions", :force => true do |t|
-    t.string   "options"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "questions", :force => true do |t|
     t.string   "question"
@@ -100,29 +64,13 @@ ActiveRecord::Schema.define(:version => 20130524093241) do
 
   add_index "registrations", ["event_id"], :name => "index_registrations_on_event_id"
 
-  create_table "text_question_regs", :force => true do |t|
-    t.string   "input"
-    t.integer  "registration_id"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
-    t.integer  "text_question_id"
-    t.integer  "position"
-  end
-
-  add_index "text_question_regs", ["registration_id"], :name => "index_text_question_regs_on_registration_id"
-
-  create_table "text_questions", :force => true do |t|
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "users", :force => true do |t|
     t.string   "name"
+    t.string   "email"
     t.string   "hashed_password"
     t.string   "salt"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
-    t.string   "email"
   end
 
 end

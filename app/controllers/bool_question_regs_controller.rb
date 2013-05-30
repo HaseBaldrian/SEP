@@ -1,2 +1,0 @@
-class BoolQuestionRegsController < ApplicationController
-end
