@@ -28,7 +28,7 @@
 		   			</td>
 		   			<td> <%= link_to '<i class="icon-remove"></i>'.html_safe, 
 							user_event_question_path(@event.user_id, @event, q), 
-							confirm: 'Sicher??!', 
+							confirm: '"'+q.question+'" wirklich loeschen?', 
 	    					method: :delete, 
 	    					:remote => :true 
 	    				%>

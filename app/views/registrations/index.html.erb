@@ -1,6 +1,6 @@
-	<p id="notice" ><%= notice %></p>
-
-	<h2>Listing registrations</h2>
+<div class="well">
+	<h4 align="right">Alle Anmeldungen zur Veranstaltung <%= @event.title %></h4>
+	<br />
 	
 	<div id="registrations_table">
 		<%= render "registrations_table" %>
@@ -9,3 +9,4 @@
 	<div align="right">
 	<%= link_to "Als CSV exportieren (ohne Warteliste)", user_event_registrations_path(format: "csv") %>
 	</div>
+</div>
