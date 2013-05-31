@@ -66,7 +66,7 @@ class EventsController < ApplicationController
 
   def edit
     @event = Event.find(params[:id])
-    @user = User.find(params[:user_id])
+    @user = @event.user
     
     respond_to do |format|
       unless session[:user_id] == 1 || @user.id == session[:user_id] 
@@ -143,7 +143,7 @@ class EventsController < ApplicationController
 
   def update
     @event = Event.find(params[:id])
-    @user = @event.user_id 
+    @user = @event.user
 
     respond_to do |format|
       if @event.update_attributes(params[:event])

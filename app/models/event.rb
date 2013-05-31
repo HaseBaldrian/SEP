@@ -5,12 +5,16 @@ class Event < ActiveRecord::Base
   
   validates :title, :presence => true, :uniqueness => true
   validates :description, :presence => true
+  validates :max_registration_count, :numericality => { :greater_than_or_equal_to => -1 }
+  
+  validate :max_reg_count_not_down
   
   accepts_nested_attributes_for :questions, :allow_destroy => true
 
   before_create :default_locked
   before_update :default_values
   before_update :link_matching
+  before_update :inspect_max_registration_count
   
   def default_locked
     self.locked = true
@@ -24,6 +28,30 @@ class Event < ActiveRecord::Base
   def link_matching
     self.link = self.title.tr(' ','_')
     self.link = self.link.downcase
+  end
+  
+  def inspect_max_registration_count
+        # falls max_registration_count nach oben gesetzt wurde, wartelisten-nachruecker informieren
+    registrations = self.registrations.find(:all, :order => 'created_at')
+    if self.max_registration_count_was < self.max_registration_count && self.max_registration_count_was != -1 
+      i=0
+      supremum = [registrations.count,self.max_registration_count].min
+      (supremum-max_registration_count_was).times do 
+        Notifier.registration_move_up(registrations[max_registration_count_was+i]).deliver
+        i+=1
+      end
+    end
+  end
+  
+  def max_reg_count_not_down
+    if self.max_registration_count_was
+      if self.max_registration_count != -1
+        if (self.max_registration_count_was>self.max_registration_count || self.max_registration_count_was == -1) && self.registrations.count>self.max_registration_count  
+            errors.add(:max_registration_count, "can't be set down, there are already registrations confirmed")
+            return false
+        end
+      end
+    end
   end
   
   def description_to_html
