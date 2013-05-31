@@ -12,38 +12,28 @@ class QuestionsController < ApplicationController
     end
     
     params[:question].merge!('event_id' => @event.id)
-   
-    #create question (u.U. mit neuen Parametern)
-    # @q = @event.questions.create(params[:question])   
-    # @q.type = model
     
+    # create weiterreichen an unterklasse, dort wird validiert    
     @q = nil
     
     case model
-    when "TextQuestion" then begin
+    when "TextQuestion" then 
       @q = TextQuestion.create(params[:question])
-      logger.info "hallo!"
-    end
     when "BoolQuestion" then
       @q = BoolQuestion.create(params[:question])
     when "OptQuestion" then
       @q = OptQuestion.create(params[:question])
     end 
     
-    
-    @questions = @event.questions.all
-   # logger.info "loggerinfo: "+@questions.inspect
-    
-    # questions nach position sortieren
-    @questions = @questions.sort_by{ |q| q.position.to_i } 
+    # questions nach position sortieren, position updaten
+    @questions = @event.questions.find(:all, :order => 'position')
     i=0
     @questions.each do |q|
       q.update_attributes(:position => i)
       i+=1
     end
     
-   # logger.info "loggerinfo2: "+@questions.inspect
-    
+    # anzahl der fragen incrementieren
     @event.update_attribute(:questions_count, @event.questions_count+1)
     
     respond_to do |format|
@@ -59,6 +49,7 @@ class QuestionsController < ApplicationController
     @user = @event.user_id
     @question = Question.find(params[:id])
     
+    # update weiterreichen an die passende unterklasse
     case @question.type
     when "TextQuestion" then       
       TextQuestion.update(@question, params[:text_question])
@@ -120,9 +111,10 @@ class QuestionsController < ApplicationController
   def destroy
     @event = Event.find(params[:event_id])
     @user = User.find(params[:user_id])
-    @question = Question.find(params[:id])
-    @q_id = @question.id
-    @question.destroy
+    question = Question.find(params[:id])
+      # id fuer q_table-update
+    @q_id = question.id
+    question.destroy
     
     respond_to do |format|
       format.html { redirect_to user_event_path(@user, @event)}
@@ -130,7 +122,9 @@ class QuestionsController < ApplicationController
     end
   end
   
-  # vertauscht zwei questions der aktuellen position (die angeklickte) mit der 
+  private 
+  
+  # vertauscht zwei questions der aktuellen position (=die angeklickte) mit der 
   # question auf der neuen position
   def update_position current_pos, new_pos
   @questions = @event.questions.find(:all, :order => 'position') 
