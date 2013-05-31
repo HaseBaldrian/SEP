@@ -31,11 +31,10 @@ class QuestionsController < ApplicationController
     # questions nach position sortieren, position updaten
     @questions = @event.update_positions
     
-    # anzahl der fragen incrementieren
-    @event.update_attribute(:questions_count, @event.questions_count+1)
-    
     respond_to do |format|
       if @q.save
+            # anzahl der fragen incrementieren
+        @event.update_attribute(:questions_count, @event.questions_count+1)
         format.html { redirect_to user_event_path(@user, @event)}
         format.js
       end

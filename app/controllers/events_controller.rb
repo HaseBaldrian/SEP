@@ -34,8 +34,8 @@ class EventsController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:user_id])
     @event = Event.find(params[:id])
+    @user = @event.user
     @questions = @event.update_positions
       # aktuelle anzahl fragen 
     @event.update_attributes(:questions_count => @questions.count)
@@ -159,7 +159,7 @@ class EventsController < ApplicationController
     @event = Event.find(params[:event_id])
     @user = @event.user_id 
     
-    if @event.locked
+    if @event.locked && @event.expiry >= Date.today
       @event.update_attributes(:locked => false)
     else
       @event.update_attributes(:locked => true)

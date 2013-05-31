@@ -10,7 +10,11 @@
 	<dt>Anmeldung
 	</dt>
 	<dd><% if @event.locked %>
-			<div class="text-error"><strong>GESPERRT</strong></div>
+			<div class="text-error"><strong>GESPERRT</strong>
+				<% if @event.expiry < Date.today %>
+					(Anmeldeschluss)
+				<% end %>
+			</div>
 			<%= link_to "freischalten", user_event_invert_locked_path(@user,@event), :class => "btn", :remote => true %>
 		<% else %>
 			<div class="text-success"><strong>GEÖFFNET</strong></div>
