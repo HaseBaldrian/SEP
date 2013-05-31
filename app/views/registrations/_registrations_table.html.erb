@@ -3,7 +3,7 @@
 	  		<th></th>
 	    	<th>Email</th>
 	    <% @questions.each do |q| %>
-	    	<th><%= q.question %></th>
+	    	<th><%= q.question %><%= q.position %></th>
 	    <% end %>
 	    	<th></th>
 	  </tr>
@@ -22,14 +22,13 @@
 	  		</td>
 	  		<td> <%= r.email %></td> 
 	  		
-	  		<% @answers = r.answers.all %>
-	  		<% @answers = @answers.sort_by{ |q| q.position.to_i }%>
+	  		<% @answers = r.answers.find(:all, :order => 'position') %>
 	  		
 	  		<% @answers.each do |a| %>
 	  			<% if a.type == "OptAnswer" %>
-	  				<td><%= a.to_html.html_safe %></td>
+	  				<td><%= a.to_html.html_safe %><%= a.position %></td>
 	  			<% else %>
-	  				<td><%= a.input %></td>
+	  				<td><%= a.input %><%= a.position %></td>
 	  			<%end %>
 	  		<% end %>
 	  		<td><%= link_to 'Anmeldung löschen', user_event_registration_path(r.event.user, r.event, r), 

@@ -82,21 +82,12 @@ class QuestionsController < ApplicationController
     @event = Event.find(params[:event_id])
     @user = @event.user_id
     @question = Question.find(params[:question_id])
+    @questions = @event.questions.find(:all, :order => 'position')
     
     current_pos = @question.position
-    new_pos = current_pos + 1
-    @questions = @event.questions.find(:all, :order => 'position') 
-    if @questions[new_pos] 
-      @questions[new_pos].update_attributes(:position => current_pos)
-      @question.update_attributes(:position => new_pos)
-    end 
-    
-  # questions nach neuer position sortieren
-    @questions = @event.questions.find(:all, :order => 'position') 
-    i=0
-    @questions.each do |q|
-      q.update_attributes(:position => i)
-      i+=1
+    unless current_pos == @questions.count-1 
+      new_pos = current_pos + 1
+      update_position current_pos, new_pos
     end
     
     respond_to do |format|
@@ -110,25 +101,13 @@ class QuestionsController < ApplicationController
     @event = Event.find(params[:event_id])
     @user = @event.user_id
     @question = Question.find(params[:question_id])
+    @questions = @event.questions.find(:all, :order => 'position')
     
     current_pos = @question.position
     unless current_pos == 0
       new_pos = current_pos - 1
-      logger.info "new_pos: " + new_pos.inspect
-      @questions = @event.questions.find(:all, :order => 'position') 
-      if @questions[new_pos] 
-        @questions[new_pos].update_attributes(:position => current_pos)
-        @question.update_attributes(:position => new_pos)
-      end 
+      update_position current_pos, new_pos
     end 
-    
-  # questions nach neuer position sortieren
-    @questions = @event.questions.find(:all, :order => 'position') 
-    i=0
-    @questions.each do |q|
-      q.update_attributes(:position => i)
-      i+=1
-    end
     
     respond_to do |format|
       format.html { redirect_to user_event_path(@user, @event) }
@@ -149,4 +128,35 @@ class QuestionsController < ApplicationController
     end
   end
   
+  # vertauscht zwei questions der aktuellen position (die angeklickte) mit der 
+  # question auf der neuen position
+  def update_position current_pos, new_pos
+  @questions = @event.questions.find(:all, :order => 'position') 
+    if @questions[new_pos] 
+     # andere frage aus dem weg und auf alte position, inklusive answers
+      @questions[new_pos].update_attributes(:position => current_pos)
+        # answers.position anpassen
+      @questions[new_pos].answers.all.each do |a|
+        a.update_attributes(:position => current_pos)
+      end
+      # angeklickte frage auf neue position inklusive answers
+      @questions[current_pos].update_attributes(:position => new_pos)
+        # answers.position anpassen
+      @questions[current_pos].answers.all.each do |a|
+        a.update_attributes(:position => new_pos)
+      end
+    end 
+  
+  # questions+answers nach neuer position sortieren, position updaten
+    @questions = @event.questions.find(:all, :order => 'position') 
+    i=0
+    @questions.each do |q|
+      q.update_attributes(:position => i)
+      # answers mitnehmen
+      q.answers.all.each do |a|
+        a.update_attributes(:position => i)
+      end
+      i+=1
+    end
+  end
 end
