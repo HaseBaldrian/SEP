@@ -1,5 +1,8 @@
 class QuestionsController < ApplicationController
   
+  skip_before_filter :authorize
+  skip_before_filter :authorize2
+  
   def create
     @event = Event.find(params[:event_id])
     @user = @event.user_id

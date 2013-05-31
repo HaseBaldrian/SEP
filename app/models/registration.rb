@@ -20,23 +20,25 @@ class Registration < ActiveRecord::Base
   end
   
   def self.to_csv registrations
-    firstline = ["\'EMAIL\'"]
-      registrations.first.answers.each do |answer|
-        firstline << "\'" + answer.question.question.upcase + "\'"
+    unless registrations.empty?
+      firstline = ["\'EMAIL\'"]
+        registrations.first.answers.each do |answer|
+          firstline << "\'" + answer.question.question.upcase + "\'"
+        end
+      
+      CSV.generate do |csv|
+        csv << firstline
+        i=0
+        registrations[0].event.max_registration_count.times do 
+          inputs = ["\'" + registrations[i].email+ "\'"]
+          answers = registrations[i].answers
+          answers.each do |answer|
+            inputs << "\'" + answer.input+ "\'"
+          end        
+          i+=1
+          csv << inputs
+        end 
       end
-    
-    CSV.generate do |csv|
-      csv << firstline
-      i=0
-      registrations[0].event.max_registration_count.times do 
-        inputs = ["\'" + registrations[i].email+ "\'"]
-        answers = registrations[i].answers
-        answers.each do |answer|
-          inputs << "\'" + answer.input+ "\'"
-        end        
-        i+=1
-        csv << inputs
-      end 
     end
-  end
+  end 
 end

@@ -1,7 +1,7 @@
 class RegistrationsController < ApplicationController
   
   skip_before_filter :authorize, :only => [:new, :create, :edit, :update, :show, :destroy]
-  skip_before_filter :authorize2, :only => [:new, :create, :edit, :update, :show, :destroy]
+  skip_before_filter :authorize2, :only => [:new, :create, :edit, :update, :show, :destroy, :index]
   
   def new
     @registration = Registration.new
@@ -117,8 +117,12 @@ class RegistrationsController < ApplicationController
     @questions = @event.questions.find(:all, :order => 'position') 
     
     respond_to do |format|
-      format.html
-      format.csv { send_data Registration.to_csv(@registrations) }
+      unless session[:user_id] == 1 || session[:user_id] == @event.user_id
+        format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }
+      else 
+        format.html
+        format.csv { send_data Registration.to_csv(@registrations) }
+      end
     end
   end
   

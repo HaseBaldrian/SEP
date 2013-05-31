@@ -12,9 +12,9 @@
 	<table class="table table-striped">
   <tr>
     <th>Titel</th>
-    <th>Beschreibung</th>
-    <th>Link</th>
-    <th>Gesperrt</th>
+    <!-- <th>Beschreibung</th>
+    <th>Link</th> -->
+    <th>Status</th>
     <th>Anmeldungen</th>
     <th>Max. Teilnehmerzahl</th>
     <th>Anmeldeschluss</th>
@@ -28,18 +28,18 @@
 	<% user = event.user_id %>
 	  <tr id=<%= event.id %>>
 		<td><%= event.title %></td>
-	    <td><%= truncate(event.description_to_html).html_safe %></td>
-	    <td><%= event.link %></td>
+	    <!-- <td><%= truncate(event.description_to_html).html_safe %></td>
+	    <td><%= event.link %></td> -->
 	    <td><% if event.locked %>
-	    		ja
+	    		<p class="text-error">Anmeldung geschlossen</p>
 	    	<% else %>
-	    		nein
+	    		<p class="text-success">Anmeldung geöffnet</p>
 	    	<% end %></td>
-	    <td><%= event.registrations.count %></td>
+	    <td><p class="text-center"><%= link_to event.registrations.count.to_s, user_event_registrations_path(user, event) %></p></td>
 	   	<td><% if event.max_registration_count == -1 %>
 	    		unbegrenzt
 	    	<% else %>
-	    		<%= event.max_registration_count %>
+	    		<p class="text-center"><%= event.max_registration_count %></p>
 	    	<% end %></td>
 	    <td><%= event.expiry.strftime('%d.%m.%Y') %></td>
 	    <% if session[:user_id] == 1 %>
