@@ -158,18 +158,21 @@ def update
   def destroy
     @event = Event.find(params[:event_id])
     @user = User.find(params[:user_id])
-    @registration = Registration.find(params[:id])
+    registration = Registration.find(params[:id])
     registrations = @event.registrations
-      # id fuer tabellen-update uebergeben
-    @id = @registration.id
       # email fuer infomail speichern
-    email = @registration.email 
+    email = registration.email 
     
-    @registration.destroy
+    registration.destroy
     
-      # Information an Nachruecker
-    if registrations[@event.max_registration_count] != nil &&  @event.max_registration_count != -1 
-      Notifier.registration_move_up(registrations[@event.max_registration_count]).deliver
+      # questions,registrations für tabellen-update
+    @questions = @event.questions.find(:all, :order => 'position')
+    @registrations = @event.registrations.all
+    
+      # Information an Nachruecker 
+      # (position im array: max_registration_count-1, da durch destroy das array kleiner wird!)
+    if registrations[@event.max_registration_count-1] != nil &&  @event.max_registration_count != -1 
+      Notifier.registration_move_up(registrations[@event.max_registration_count-1]).deliver
     end
       # Abmeldebestaetigung
     Notifier.registration_cancelled(@event,email).deliver
