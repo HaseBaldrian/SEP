@@ -8,7 +8,7 @@ class RegistrationsController < ApplicationController
    
     if (params[:id]) 
       @event = Event.find_by_link(params[:id].downcase) 
-    else 
+    elsif Event.exists?(params[:event_id]) && User.exists?(params[:user_id])
       @event = Event.find(params[:event_id]) 
     end
     
@@ -88,17 +88,23 @@ class RegistrationsController < ApplicationController
   end
   
   def show
-    @user = User.find(params[:user_id])
-    @event = Event.find(params[:event_id])
-    @registration = Registration.find(params[:id])
-    
-    @waitlist = waitlist(@registration)
-    
-    # answers nach position sortieren
-    @answers = @registration.answers.find(:all, :order => 'position')
+    if User.exists?(params[:user_id]) && Event.exists?(params[:event_id]) && Registration.exists?(params[:id])
+      @user = User.find(params[:user_id])
+      @event = Event.find(params[:event_id])
+      @registration = Registration.find(params[:id])
+      
+      @waitlist = waitlist(@registration)
+      
+      # answers nach position sortieren
+      @answers = @registration.answers.find(:all, :order => 'position')
+   end
     
     respond_to do |format|
-      format.html
+      unless @user # falls also fehler in der adresse, dann wurde @user nicht initialisiert
+        format.html { render :status => 404, :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found }
+      else
+        format.html
+      end
     end
   end
   
@@ -117,14 +123,20 @@ class RegistrationsController < ApplicationController
   end
   
   def edit
-    @user = User.find(params[:user_id])
-    @event = Event.find(params[:event_id])
-    @registration = Registration.find(params[:id])
+    if User.exists?(params[:user_id]) && Event.exists?(params[:event_id]) && Registration.exists?(params[:id])
+      @user = User.find(params[:user_id])
+      @event = Event.find(params[:event_id])
+      @registration = Registration.find(params[:id])
+      
+      @waitlist = waitlist(@registration)
+    end   
     
-    @waitlist = waitlist(@registration)
-       
     respond_to do |format|
-      format.html
+      unless @user # falls also fehler in der adresse, dann wurde @user nicht initialisiert
+        format.html { render :status => 404, :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found }
+      else
+        format.html
+      end
     end
   end
   
@@ -156,33 +168,39 @@ def update
   end
   
   def destroy
-    @event = Event.find(params[:event_id])
-    @user = User.find(params[:user_id])
-    registration = Registration.find(params[:id])
-    registrations = @event.registrations
-      # email fuer infomail speichern
-    email = registration.email 
-    
-    registration.destroy
-    
-      # questions,registrations für tabellen-update
-    @questions = @event.questions.find(:all, :order => 'position')
-    @registrations = @event.registrations.all
-    
-      # Information an Nachruecker 
-      # (position im array: max_registration_count-1, da durch destroy das array kleiner wird!)
-    if registrations[@event.max_registration_count-1] != nil &&  @event.max_registration_count != -1 
-      Notifier.registration_move_up(registrations[@event.max_registration_count-1]).deliver
+    if User.exists?(params[:user_id]) && Event.exists?(params[:event_id]) && Registration.exists?(params[:id])
+      @event = Event.find(params[:event_id])
+      @user = User.find(params[:user_id])
+      registration = Registration.find(params[:id])
+      registrations = @event.registrations
+        # email fuer infomail speichern
+      email = registration.email 
+      
+      registration.destroy
+      
+        # questions,registrations für tabellen-update
+      @questions = @event.questions.find(:all, :order => 'position')
+      @registrations = @event.registrations.all
+      
+        # Information an Nachruecker 
+        # (position im array: max_registration_count-1, da durch destroy das array kleiner wird!)
+      if registrations[@event.max_registration_count-1] != nil &&  @event.max_registration_count != -1 
+        Notifier.registration_move_up(registrations[@event.max_registration_count-1]).deliver
+      end
+        # Abmeldebestaetigung
+      Notifier.registration_cancelled(@event,email).deliver
     end
-      # Abmeldebestaetigung
-    Notifier.registration_cancelled(@event,email).deliver
     
     respond_to do |format|
-      unless session[:user_id] 
-        format.html { redirect_to new_user_event_registration_path(@user,@event), notice: 'Abmeldung erfolgreich.' } 
+      unless @user # falls also fehler in der adresse, dann wurde @user nicht initialisiert
+        format.html { render :status => 404, :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found }
       else
-        format.html { redirect_to user_event_registrations_path(@user,@event) }
-        format.js 
+        unless session[:user_id] 
+          format.html { redirect_to new_user_event_registration_path(@user,@event), notice: 'Abmeldung erfolgreich.' } 
+        else
+          format.html { redirect_to user_event_registrations_path(@user,@event) }
+          format.js 
+        end
       end
     end
   end
