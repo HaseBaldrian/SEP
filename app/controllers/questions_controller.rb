@@ -85,6 +85,7 @@ class QuestionsController < ApplicationController
     @questions = @event.questions.find(:all, :order => 'position')
     
     current_pos = @question.position
+    # falls nicht schon letzter platz
     unless current_pos == @questions.count-1 
       new_pos = current_pos + 1
       update_position current_pos, new_pos
@@ -104,6 +105,7 @@ class QuestionsController < ApplicationController
     @questions = @event.questions.find(:all, :order => 'position')
     
     current_pos = @question.position
+    # falls nicht schon erster platz
     unless current_pos == 0
       new_pos = current_pos - 1
       update_position current_pos, new_pos
