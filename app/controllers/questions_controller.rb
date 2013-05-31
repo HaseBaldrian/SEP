@@ -5,7 +5,7 @@ class QuestionsController < ApplicationController
   
   def create
     @event = Event.find(params[:event_id])
-    @user = @event.user_id
+    @user = @event.user
     
     # setup model-type
     # evtl in eigene methode umziehen "private def setup_sti_type"
@@ -43,7 +43,7 @@ class QuestionsController < ApplicationController
   
   def update
     @event = Event.find(params[:event_id])
-    @user = @event.user_id
+    @user = @event.user
     @question = Question.find(params[:id])
     
     # update weiterreichen an die passende unterklasse
@@ -68,7 +68,7 @@ class QuestionsController < ApplicationController
   # position += 1, "down" weil anschließend weiter unten in der Liste
   def position_down 
     @event = Event.find(params[:event_id])
-    @user = @event.user_id
+    @user = @event.user
     @question = Question.find(params[:question_id])
     @questions = @event.questions.find(:all, :order => 'position')
     
@@ -88,7 +88,7 @@ class QuestionsController < ApplicationController
     # position -= 1, "up" weil anschließend weiter oben in der Liste
   def position_up 
     @event = Event.find(params[:event_id])
-    @user = @event.user_id
+    @user = @event.user
     @question = Question.find(params[:question_id])
     @questions = @event.questions.find(:all, :order => 'position')
     
@@ -107,7 +107,7 @@ class QuestionsController < ApplicationController
   
   def destroy
     @event = Event.find(params[:event_id])
-    @user = User.find(params[:user_id])
+    @user = @event.user
     question = Question.find(params[:id])
       # id fuer q_table-update
     @q_id = question.id

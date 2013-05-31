@@ -5,7 +5,6 @@ class OptQuestion < Question
   validates :options, :presence => true
   
   before_update :clear_empty_lines
-  #before_update :to_html
   
   def clear_empty_lines
     options_new = ""
