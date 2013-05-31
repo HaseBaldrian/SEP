@@ -26,12 +26,7 @@ class QuestionsController < ApplicationController
     end 
     
     # questions nach position sortieren, position updaten
-    @questions = @event.questions.find(:all, :order => 'position')
-    i=0
-    @questions.each do |q|
-      q.update_attributes(:position => i)
-      i+=1
-    end
+    @questions = @event.update_positions
     
     # anzahl der fragen incrementieren
     @event.update_attribute(:questions_count, @event.questions_count+1)

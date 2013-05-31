@@ -35,4 +35,15 @@ class Event < ActiveRecord::Base
     end
     return description_new
   end
+  
+  # sortiert alle questions nach position und setzt die positionen neu, iteriert
+  def update_positions
+    questions = self.questions.find(:all, :order => 'position')
+    i=0
+    questions.each do |q|
+      q.update_attributes(:position => i)
+      i+=1
+    end 
+    return self.questions.find(:all, :order => 'position')
+  end
 end
