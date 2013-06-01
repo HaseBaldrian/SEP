@@ -14,18 +14,18 @@
 	<table class="table table-striped">
 		<tr>
 			<th>Veranstaltungstitel</th>
-			<td><%= f.text_field :title %></td>
+			<td><%= f.text_field :title, :class =>"span12", :placeholder => "Titel" %></td>
 		</tr>
 		<tr>
-			<td><strong>Beschreibung</strong><br />
-				<em>Zeit, Ort, weitere Details</em>
+			<td><strong>Beschreibung</strong></td>
+			<td><%= f.text_area :description, :rows => 5, 
+					:class => "span12", :placeholder => "Zeit, Ort, weitere Details" %>
 			</td>
-			<td><%= f.text_area :description %></td>
 		</tr>
 		<tr>
-			<td><strong>Maximale Teilnehmerzahl</strong><br />
-				<em>Falls keine Begrenzung: -1</em></td>
-			<td><%= f.number_field :max_registration_count %></td>
+			<td><strong>Maximale Teilnehmerzahl</strong></td>
+			<td><%= f.number_field :max_registration_count, :class => "span4",
+					:placeholder => "Falls keine Begrenzung: -1" %></td>
 		</tr>
 		<tr>
 			<th>Anmeldeschluss</th>
