@@ -19,15 +19,15 @@ class OptQuestion < Question
     end
   end
   
-  def to_html
-    options_new = ""
-    if self.options
-      self.options.each_line do |l|
-        unless l.strip.blank? # heißt: ist leerzeile
-          options_new += l.strip + "<br />"
-        end
-      end
-    end
-    return options_new
-  end
+  # def to_html
+    # options_new = ""
+    # if self.options
+      # self.options.each_line do |l|
+        # unless l.strip.blank? # heißt: ist leerzeile
+          # options_new += l.strip + "<br />"
+        # end
+      # end
+    # end
+    # return options_new
+  # end
 end

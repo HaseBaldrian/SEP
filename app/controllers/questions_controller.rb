@@ -7,11 +7,10 @@ class QuestionsController < ApplicationController
     @event = Event.find(params[:event_id])
     @user = @event.user
     
-    # setup model-type
-    # evtl in eigene methode umziehen "private def setup_sti_type"
-    model = nil
+    # setup question-type
+    qtype = nil
     if !params[:question].blank? && !params[:question][:type].blank?
-      model = params[:question].delete(:type).constantize.to_s
+      qtype = params[:question].delete(:type).constantize.to_s
     end
     
     params[:question].merge!('event_id' => @event.id)
@@ -19,7 +18,7 @@ class QuestionsController < ApplicationController
     # create weiterreichen an unterklasse, dort wird validiert    
     @q = nil
     
-    case model
+    case qtype
     when "TextQuestion" then 
       @q = TextQuestion.create(params[:question])
     when "BoolQuestion" then
