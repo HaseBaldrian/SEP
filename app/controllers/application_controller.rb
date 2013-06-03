@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   def authorize2
     unless session[:user_id] == 1
       format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }
+      #redirect_to login_url, :notice => "Please log in"
     end
   end  
 

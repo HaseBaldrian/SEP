@@ -16,13 +16,13 @@
 		
 <table class="table">
 	<tr>
-		<th>Email</th>
+		<th class="span7">Email</th>
 		<td><%= @registration.email %></td>
 	</tr>
 	
 	<% @answers.each do |a| %>
 	<tr>
-		<th><%= a.question.question %></th>
+		<th class="span7"><%= a.question.question %></th>
 		<% if a.type == "OptAnswer" %>
 			<td><%= a.to_html.html_safe %></td>
 		<% else %>

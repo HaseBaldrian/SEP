@@ -1,4 +1,4 @@
-<table class="table table-striped">
+<table class="table table-striped" id="registrations_table">
 	  <tr>
 	  		<th></th>
 	    	<th>Email</th>
@@ -22,8 +22,7 @@
 	  		</td>
 	  		<td> <%= r.email %></td> 
 	  		
-	  		<% @answers = r.answers.all %>
-	  		<% @answers = @answers.sort_by{ |q| q.position.to_i }%>
+	  		<% @answers = r.answers.find(:all, :order => 'position') %>
 	  		
 	  		<% @answers.each do |a| %>
 	  			<% if a.type == "OptAnswer" %>

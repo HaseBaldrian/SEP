@@ -5,10 +5,10 @@ class EventsController < ApplicationController
   
   def index
     @users = User.all
-    if session[:user_id] == 1
+    if session[:user_id] == 1 # wenn superuser mit id=1 eingeloggt ist, zeige alle events
       @events = Event.order(:expiry)
-      @user = User.find_by_id(19)
-    else
+      @user = User.find_by_id(1)
+    else  # ansonsten zeige nur die events vom aktuell eingeloggten user
       @users.each do |user| 
         if user.id == session[:user_id] 
         @user = user
@@ -17,7 +17,7 @@ class EventsController < ApplicationController
       end
     end
     
-    # update locked
+    # update locked: falls anmeldeschluss vorbei, schliesse anmeldung
     if @events   
       @events.each do |event|
         event.update_attribute(:locked, true)  if event.expiry < Date.today 
@@ -28,41 +28,29 @@ class EventsController < ApplicationController
       unless session[:user_id] 
         format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }
       else
-        format.html # index.html.erb
+        format.html 
       end
     end
   end
-  
-  # GET /events/1
-  # GET /events/1.json
-  def show
-    @user = User.find(params[:user_id])
-    @event = Event.find(params[:id])
-    @questions = @event.questions
-    
-    @event.update_attributes(:questions_count => @questions.count)
-    
-    @event.update_attribute(:locked, true) if @event.expiry < Date.today      
 
-    # questions nach position sortieren
-    @questions = @questions.sort_by{ |q| q.position.to_i } 
-    i=0
-    @questions.each do |q|
-      q.update_attributes(:position => i)
-      i+=1
-    end
+  def show
+    @event = Event.find(params[:id])
+    @user = @event.user
+    @questions = @event.update_positions
+      # aktuelle anzahl fragen 
+    @event.update_attributes(:questions_count => @questions.count)
+      # falls anmeldeschluss vorbei: schliessen
+    @event.update_attribute(:locked, true) if @event.expiry < Date.today      
 
     respond_to  do  |format|
       unless session[:user_id] == 1 || @user.id == session[:user_id] 
         format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }
       else
-        format.html # show.html.erb
+        format.html
       end
     end
   end
 
-  # GET /events/new
-  # GET /events/new.json
   def new
     @user = User.find(params[:user_id])
     @event = @user.events.new
@@ -71,15 +59,14 @@ class EventsController < ApplicationController
       unless session[:user_id]
         format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }
       else
-        format.html # new.html.erb
+        format.html 
       end
     end
   end
 
-  # GET /events/1/edit
   def edit
     @event = Event.find(params[:id])
-    @user = User.find(params[:user_id])
+    @user = @event.user
     
     respond_to do |format|
       unless session[:user_id] == 1 || @user.id == session[:user_id] 
@@ -90,8 +77,6 @@ class EventsController < ApplicationController
     end
   end
 
-  # POST /events
-  # POST /events.json
   def create
     @user = User.find(params[:user_id])     
     @event = @user.events.create(params[:event]) 
@@ -112,24 +97,18 @@ class EventsController < ApplicationController
   def create_double
     @user = User.find(params[:user_id]) 
     @pattern = Event.find(params[:event_id])
-    pattern_questions = @pattern.questions
+    @pattern_questions = @pattern.update_positions
     @event = Event.new
-       
-    # questions nach position sortieren, position updaten
-    pattern_questions = pattern_questions.sort_by{ |q| q.position.to_i } 
-    i=0
-    pattern_questions.each do |q|
-      q.update_attributes(:position => i)
-      i+=1
-    end
     
+      # falls validierung schief geht nochmal die question_types vom pattern für duplicate
     @question_types = []
     
-    pattern_questions.each do |pq|
+    @pattern_questions.each do |pq|
         @q = @event.questions.build(:question => pq.question, :position => pq.position, :option1 => pq.option1, :option2 => pq.option2, :options => pq.options)
         @question_types[pq.position] = pq.type
     end
     
+      # parameter auseinanderpfluecken, damit create was damit anfangen kann
     detached_params = detach_questions_and_types_params
     questions_params = detached_params.delete('questions')
     type_params = detached_params.delete('types')
@@ -141,7 +120,8 @@ class EventsController < ApplicationController
     
     @event = @user.events.create(params[:event]) 
     
-    questions =  @event.questions 
+    # question.type setzen
+    questions = @event.questions 
     i=0
     questions.each do |q|
       q.type = type_params.delete(i.to_s)
@@ -161,11 +141,9 @@ class EventsController < ApplicationController
     end
   end
 
-  # PUT /events/1
-  # PUT /events/1.json
   def update
     @event = Event.find(params[:id])
-    @user = @event.user_id 
+    @user = @event.user
 
     respond_to do |format|
       if @event.update_attributes(params[:event])
@@ -176,11 +154,12 @@ class EventsController < ApplicationController
     end
   end
   
+  # schliessen/oeffnen eines events zur anmeldung
   def invert_locked
     @event = Event.find(params[:event_id])
     @user = @event.user_id 
     
-    if @event.locked
+    if @event.locked && @event.expiry >= Date.today
       @event.update_attributes(:locked => false)
     else
       @event.update_attributes(:locked => true)
@@ -192,6 +171,7 @@ class EventsController < ApplicationController
     end
   end
   
+  # questions/q_table neu rendern 
   def refresh_questions
     @event = Event.find(params[:event_id])
     @questions = @event.questions.all(:order => 'position')
@@ -201,10 +181,9 @@ class EventsController < ApplicationController
     end
   end
 
-  # DELETE /events/1
-  # DELETE /events/1.json
   def destroy
     @event = Event.find(params[:id])
+      # id zum tabellen-update speichern und uebergeben
     @id = @event.id
     @user = @event.user_id 
     @event.destroy
@@ -214,26 +193,21 @@ class EventsController < ApplicationController
         format.html { render :status => 403, :file => "#{Rails.root}/public/403", :layout => false, :status => :forbidden }  
       else 
         format.html { redirect_to users_path, notice: 'Veranstaltung geloescht.' }
-        format.js   #destroy.js.erb
+        format.js   
       end
     end
   end
   
-  def duplicate
+  # um ein event mit allen questions zu kopieren
+  # @pattern ist das zu clonende event, @event das neue zu erstellende
+  def duplicate 
     @pattern = Event.find(params[:event_id])
-    @pattern_questions = @pattern.questions
+    @pattern_questions = @pattern.update_positions
     
     @user = User.find_by_id(session[:user_id])
     @event = Event.new
-       
-    # questions nach position sortieren, position updaten
-    @pattern_questions = @pattern_questions.sort_by{ |q| q.position.to_i } 
-    i=0
-    @pattern_questions.each do |q|
-      q.update_attributes(:position => i)
-      i+=1
-    end
     
+    # question-types muessen uebergeben werden, damit spaeter die richtigen kopien erstellt werden koennen
     @question_types = []
     
     @pattern_questions.each do |pq|

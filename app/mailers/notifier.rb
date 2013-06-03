@@ -37,7 +37,7 @@ class Notifier < ActionMailer::Base
   
   def registration_cancelled event, email
     @event = event
-    mailt :to => email, :subject => "Abmeldung erfolgreich"
+    mail :to => email, :subject => "Abmeldung erfolgreich"
   end
   
   def registration_move_up registration

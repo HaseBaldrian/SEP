@@ -13,8 +13,8 @@
 
 	<table class="table table-striped">
 		<tr>
-			<td><%= f.label :email, "Email" %></td>
-			<td><%= f.text_field :email %></td>
+			<td class="span7"><%= f.label :email, "Email" %></td>
+			<td><%= f.text_field :email, :class => "span12" %></td>
 		</tr>
   
   
@@ -24,29 +24,40 @@
 
 		<tr>
 		<% if q.type == "TextQuestion" %>
-			<td><%= a.label :input, q.question %></td>
-			<td><%= a.text_field :input %></td>
+			<td class="span7"><%= a.label :input, q.question %></td>
+			<td><%= a.text_field :input, :class => "span12" %></td>
 		 	
 		 		<%= a.hidden_field :type, :value => "TextAnswer" %> 
 		 	
 		<% elsif q.type == "BoolQuestion" %>
-			<td><%= a.label :input, q.question %></td> 
+			<td class="span7"><%= a.label :input, q.question %></td> 
 				 
-			<td><div class="field">
-				<%= a.radio_button :input, q.option1, :checked => true %> 
-				<%= a.label q.option1, :value => q.option1, :style => "display:inline" %>
-				<%= a.radio_button :input, q.option2 %>
-				<%= a.label q.option2, :value => q.option2, :style => "display:inline" %>
+			<td><div class="span1"></div>
+				<div class="span11">
+					<% if q.options %>
+				<% q.options.each_line do |opt| %>
+					<% if a.object.input == opt %>
+						<%= a.radio_button :input, opt, :checked => true %>					
+					<% else %>
+						<%= a.radio_button :input, opt %>
+					<% end %>
+					
+					<%= a.label opt, :value => opt, :style => "display:inline" %><br />
+				<% end %>
+					<% end %>
 				</div>
+
 	 		 </td>		
 	 		 <div class="field">
 		 		<%= a.hidden_field :type, :value => "BoolAnswer" %>
 		 	</div> 
 		 	
 	 	 <% elsif q.type == "OptQuestion" %>
-			<td><%= a.label :input, q.question %></td> 
+			<td class="span7"><%= a.label :input, q.question %></td> 
 				 
-			<td><% q.options.each_line do |opt| %>
+			<td><div class="span1"></div>
+				<div class="span11">
+				<% q.options.each_line do |opt| %>
 					<% if a.object.input!=nil %>
 						<% if a.object.input.include?(opt) %>
 							<%= check_box_tag a.object.position.to_s+'_options[]', opt, true %>					
@@ -59,6 +70,7 @@
 					
 					<%= a.label opt, :style => "display:inline" %><br />
 				<% end %>
+				</div>
 	 		 </td>		
 	 		 <div class="field">
 		 		<%= a.hidden_field :type, :value => "OptAnswer" %>

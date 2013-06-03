@@ -21,7 +21,8 @@
 			:url => user_event_questions_path(@user, @event), :remote => true) do |f| %>
 		
 		<div class="field">
-			<%= f.text_field :question %>
+			<%= f.label :question, "Frage: ", :class => "span3",:style => "display:inline" %>
+			<%= f.text_field :question, :class => "span9" %>
 		</div>
 		<div class="field">
 			<%= f.hidden_field :position, :value => @event.questions_count+1 %>
@@ -37,21 +38,18 @@
 	
 	<div class="well">
 	<h4>Frage für Alternativauswahl</h4>
-	<p><em>Geschlecht: männlich/weiblich, ...</em></p>
+	<p><em>Geschlecht: männlich/weiblich/Pirat, ...</em></p>
 	<%= form_for([@user, @event, @event.questions.build], 
 			:url => user_event_questions_path(@user, @event), :remote => true) do |f| %>
 		
 		<div class="field">
-			<%= f.label :question, "Frage: ", :style => "display:inline" %>
-			<%= f.text_field :question %>
+			<%= f.label :question, "Frage: ", :class => "span3", :style => "display:inline" %>
+			<%= f.text_field :question, :class => "span9" %>
 		</div>
 		<div class="field">
-			<%= f.label :option1, "Alternative 1: ", :style => "display:inline" %>
-			<%= f.text_field :option1 %> 
-		</div>
-		<div class="field">
-			<%= f.label :option2, "Alternative 2: ", :style => "display:inline" %>
-			<%= f.text_field :option2 %>
+			<%= f.label :options, "Optionen: ", :class => "span3", :style => "display:inline" %> 
+			<%= f.text_area :options, :class => "span9", :rows => 8, 
+				:placeholder => "pro Option eine Zeile" %> 
 		</div>
 		<div class="field">
 			<%= f.hidden_field :position, :value => @event.questions_count+1 %>
@@ -66,20 +64,19 @@
 	</div>
 	
 	<div class="well">
-	<h4>Frage zur Auswahl verschiedener Optionen</h4>
-	<p><em>Fächer: Informatik/Mathematik/Spanisch/... <br />
-		(Pro Option eine Zeile)
-	</em></p>
+	<h4>Frage für Mehrfachauswahl</h4>
+	<p><em>Fächer: Informatik/Mathematik/Spanisch/... </em></p>
 	<%= form_for([@user, @event, @event.questions.build], 
 			:url => user_event_questions_path(@user, @event), :remote => true) do |f| %>
 		
 		<div class="field">
-			<%= f.label :question, "Frage: ", :style => "display:inline" %>
-			<%= f.text_field :question %>
+			<%= f.label :question, "Frage: ", :class => "span3",:style => "display:inline" %>
+			<%= f.text_field :question, :class => "span9" %>
 		</div>
 		<div class="field">
-			<%= f.label :options, "Optionen: ", :style => "display:inline" %> 
-			<%= f.text_area :options %> 
+			<%= f.label :options, "Optionen: ", :class => "span3", :style => "display:inline" %> 
+			<%= f.text_area :options, :class => "span9", :rows => 8, 
+				:placeholder => "pro Option eine Zeile" %> 
 		</div>
 		<div class="field">
 			<%= f.hidden_field :position, :value => @event.questions_count+1 %>
