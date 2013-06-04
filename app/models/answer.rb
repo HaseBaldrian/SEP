@@ -5,5 +5,4 @@ class Answer < ActiveRecord::Base
   attr_accessible :position, :registration_id, :question_id, :input
     
   validates :position, :presence => true
-  validates :input, :presence => true
 end

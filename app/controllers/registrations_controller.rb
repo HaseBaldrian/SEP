@@ -161,7 +161,14 @@ def update
     if answers_params
       params[:registration] = params[:registration].merge("answers_attributes" => answers_params)
     end 
-
+    
+    answers = @registration.answers.all
+    answers.each do |a|
+      if a.type == "OptAnswer"
+        a.update_attributes(:input => "")
+      end  
+    end
+    
     respond_to do |format|
       if @registration.update_attributes(params[:registration])    
         format.html { redirect_to user_event_registration_path(@user, @event, @registration), notice: 'Aenderungen erfolgreich eingetragen.' }
