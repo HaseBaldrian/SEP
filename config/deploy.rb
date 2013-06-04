@@ -15,7 +15,10 @@ set :deploy_to, "/var/webapps/#{application}"
 
 set :use_sudo, false
 
-#default_run_options[:pty] = true
+default_run_options[:pty] = true
+
+require "bundler/capistrano"
+require "rvm/capistrano"
 
 namespace(:custom) do
   
