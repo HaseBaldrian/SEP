@@ -5,10 +5,6 @@ class Notifier < ActionMailer::Base
   #
   #   en.notifier.registration_received.subject
   #
-  # def user_registration_received user
-    # @user = user
-    # mail :to => user.email, :subject => "Registration Confirmation"
-  # end
   
   def event_taken event
     @event = event 
