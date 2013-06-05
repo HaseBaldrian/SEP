@@ -15,6 +15,7 @@ set :deploy_to, "/var/webapps/#{application}"
 
 set :use_sudo, false
 
+set :asset_env, "RAILS_RELATIVE_URL_ROOT=/anmeldesystem"
 default_run_options[:pty] = true
 
 require "bundler/capistrano"
