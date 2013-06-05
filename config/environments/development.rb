@@ -36,5 +36,5 @@ Loginsystem::Application.configure do
   config.assets.debug = true
   
   config.action_mailer.delivery_method = :test
-
+  ActionMailer::Base.default :from => 'Sam Ruby <loginsystem@example.com>'  
 end
