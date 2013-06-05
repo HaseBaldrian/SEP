@@ -4,8 +4,8 @@ soeben ist Ihre Anmeldung zur Veranstaltung <%= @event.title %> bei uns eingegan
 
 Ihre Anmeldedaten können Sie unter folgendem Link weiterhin erreichen: 
 
-http://localhost:3000/users/<%= @user.id.to_s %>/events/<%= @event.id.to_s %>/registrations/<%= @registration.id.to_s %>
+<%= user_event_registration_path(@user, @event, @registration)%>
 
-Dort können Sie Ihre Angaben auch nochmals ändern und sich abmelden. 
+Dort können Sie Ihre Angaben auch nochmals ändern oder sich abmelden. 
 
 Ihr DDI-Team

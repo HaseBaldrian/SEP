@@ -36,5 +36,7 @@ Loginsystem::Application.configure do
   config.assets.debug = true
   
   config.action_mailer.delivery_method = :test
-  ActionMailer::Base.default :from => 'Sam Ruby <loginsystem@example.com>'  
+  ActionMailer::Base.default :from => 'Sam Ruby <loginsystem@example.com>'
+  
+  Rails.application.routes.default_url_options[:host] = 'localhost:3000'  
 end

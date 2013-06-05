@@ -4,7 +4,7 @@ wir freuen uns, Ihnen mitteilen zu können, dass sie soeben einen Platz in der V
 
 Ihre Anmeldedaten können Sie unter folgendem Link weiterhin erreichen: 
 
-http://localhost:3000/users/<%= @user.id.to_s %>/events/<%= @event.id.to_s %>/registrations/<%= @registration.id.to_s %>
+<%= user_event_registration_path(@user, @event, @registration)%>
 
 Dort können Sie Ihre Angaben auch nochmals ändern und sich abmelden. 
 

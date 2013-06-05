@@ -6,7 +6,7 @@
 	<dd><%= @event.description_to_html.html_safe %>			
 	</dd>
 	<dt>Anmeldelink</dt>
-	<dd>http://localhost:3000/anmeldung/<%= @event.link %></dd>
+	<dd><%= @event.url %></dd>
 	<dt>Anmeldung
 	</dt>
 	<dd><% if @event.locked %>

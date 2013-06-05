@@ -68,4 +68,5 @@ Loginsystem::Application.configure do
   config.action_mailer.delivery_method = :sendmail
   ActionMailer::Base.default :from => 'DDI Anmeldung <anmeldesystem@ddi.in.tum.de>'    
   
+  Rails.application.routes.default_url_options[:host] = 'ddi.in.tum.de' 
 end

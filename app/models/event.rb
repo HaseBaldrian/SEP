@@ -30,6 +30,10 @@ class Event < ActiveRecord::Base
     self.link = self.link.downcase
   end
   
+  def url
+    return Rails.application.routes.url_helpers.url_for(:controller => :registrations, :action => :new, :id => self.link) 
+  end
+  
   def inspect_max_registration_count
         # falls max_registration_count nach oben gesetzt wurde, wartelisten-nachruecker informieren
     registrations = self.registrations.find(:all, :order => 'created_at')
