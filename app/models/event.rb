@@ -31,7 +31,7 @@ class Event < ActiveRecord::Base
   end
   
   def url
-    return Rails.application.routes.url_helpers.url_for(:controller => :registrations, :action => :new, :id => self.link) 
+    return "http://" + Rails.application.routes.default_url_options[:host] + "/" + Rails.application.routes.url_helpers.url_for(:controller => :registrations, :action => :new, :id => self.link, :only_path => true) 
   end
   
   def inspect_max_registration_count
