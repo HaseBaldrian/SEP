@@ -30,8 +30,9 @@ class Event < ActiveRecord::Base
     self.link = self.link.downcase
   end
   
+  #Kurzlink /anmeldung ist hier hardcodiert.
   def url
-    return "http://" + Rails.application.routes.default_url_options[:host] + "/" + Rails.application.routes.url_helpers.url_for(:controller => :registrations, :action => :new, :id => self.link, :only_path => true) 
+    return "http://" + Rails.application.routes.default_url_options[:host] + "/anmeldung/" +  self.link
   end
   
   def inspect_max_registration_count
