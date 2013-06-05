@@ -41,19 +41,21 @@ class RegistrationsController < ApplicationController
     @user = @event.user
     @questions = @event.questions.find(:all, :order => 'position')
     
-    # params auseinandernehmen (type separieren und options einspeissen)
-    detached_params = detach_answers_and_types_params
-    answers_params = detached_params.delete('answers')
-    type_params = detached_params.delete('types')
-    
-    # options zu detach_params dazu
-    options_params = detach_options_params(answers_params.count)
-    match_answers_and_options answers_params, options_params
-    
-    # detach_params wieder zu registration_params dazu
-    if answers_params
-      params[:registration].merge!("answers_attributes" => answers_params)
-    end 
+    if !params[:registration][:answers_attributes].blank?
+      # params auseinandernehmen (type separieren und options einspeissen)
+      detached_params = detach_answers_and_types_params
+      answers_params = detached_params.delete('answers')
+      type_params = detached_params.delete('types')
+      
+      # options zu detach_params dazu
+      options_params = detach_options_params(answers_params.count)
+      match_answers_and_options answers_params, options_params
+      
+      # detach_params wieder zu registration_params dazu
+      if answers_params
+        params[:registration].merge!("answers_attributes" => answers_params)
+      end 
+    end
     
     @registration = @event.registrations.create(params[:registration]) 
     
@@ -149,17 +151,19 @@ def update
     @user = User.find(params[:user_id])
     @registration = Registration.find(params[:id])
     
-    # params auseinandernehmen (type separieren und options einspeissen)
-    detached_params = detach_answers_and_types_params
-    answers_params = detached_params.delete('answers')
-    
-    # options zu detach_params dazu
-    options_params = detach_options_params(answers_params.count)
-    match_answers_and_options answers_params, options_params
-    
-    # detach_params wieder zu registration_params dazu
-    if answers_params
-      params[:registration] = params[:registration].merge("answers_attributes" => answers_params)
+    if !params[:registration][:answers_attributes].blank?
+      # params auseinandernehmen (type separieren und options einspeissen)
+      detached_params = detach_answers_and_types_params
+      answers_params = detached_params.delete('answers')
+      
+      # options zu detach_params dazu
+      options_params = detach_options_params(answers_params.count)
+      match_answers_and_options answers_params, options_params
+      
+      # detach_params wieder zu registration_params dazu
+      if answers_params
+        params[:registration] = params[:registration].merge("answers_attributes" => answers_params)
+      end 
     end 
     
     answers = @registration.answers.all

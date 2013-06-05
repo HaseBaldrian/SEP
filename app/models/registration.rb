@@ -29,7 +29,8 @@ class Registration < ActiveRecord::Base
       CSV.generate do |csv|
         csv << firstline
         i=0
-        registrations[0].event.max_registration_count.times do 
+        count = [registrations[0].event.max_registration_count, registrations.count].min
+        count.times do 
           inputs = ["\'" + registrations[i].email+ "\'"]
           answers = registrations[i].answers
           answers.each do |answer|
