@@ -82,18 +82,26 @@ class RegistrationsController < ApplicationController
           Notifier.registration_received(@registration).deliver
         end
         
-        format.html { redirect_to user_event_registration_path(@user, @event, @registration), notice: 'Anmeldung erfolgreich.' }
+        format.html { redirect_to user_event_registration_path(@user, @event, @registration, :mail => @registration.email), notice: 'Anmeldung erfolgreich.' }
       else
         format.html { render action: "new" }
       end
     end
   end
   
-  def show
-    if User.exists?(params[:user_id]) && Event.exists?(params[:event_id]) && Registration.exists?(params[:id])
-      @user = User.find(params[:user_id])
-      @event = Event.find(params[:event_id])
-      @registration = Registration.find(params[:id])
+  def show  
+    # prüfen, ob emailadresse zur registration-id passt
+    if Registration.exists?(params[:id])
+      if Registration.find(params[:id]) == Registration.find_by_email(params[:mail])
+        @registration = Registration.find(params[:id])
+      end
+    end
+    
+    if User.exists?(params[:user_id]) && Event.exists?(params[:event_id]) && @registration
+      #TODO hier andere abfrage!! 
+      #passen user und event mit den datenbankangaben der registration zusammen?
+      @event = @registration.event
+      @user = @event.user
       
       @waitlist = waitlist(@registration)
       
@@ -111,8 +119,8 @@ class RegistrationsController < ApplicationController
   end
   
   def index
-    @user = User.find(params[:user_id])
     @event = Event.find(params[:event_id])
+    @user = @event.user
     @registrations = @event.registrations.find(:all, :order => 'created_at') 
     
     # questions nach position sortieren
@@ -129,10 +137,18 @@ class RegistrationsController < ApplicationController
   end
   
   def edit
-    if User.exists?(params[:user_id]) && Event.exists?(params[:event_id]) && Registration.exists?(params[:id])
-      @user = User.find(params[:user_id])
-      @event = Event.find(params[:event_id])
-      @registration = Registration.find(params[:id])
+    # prüfen, ob emailadresse zur registration-id passt
+    if Registration.exists?(params[:id])
+      if Registration.find(params[:id]) == Registration.find_by_email(params[:mail])
+        @registration = Registration.find(params[:id])
+      end
+    end
+    
+    if User.exists?(params[:user_id]) && Event.exists?(params[:event_id]) && @registration
+      #TODO hier andere abfrage!! 
+      #passen user und event mit den datenbankangaben der registration zusammen?
+      @event = @registration.event
+      @user = @event.user
       
       @waitlist = waitlist(@registration)
     end   
@@ -147,9 +163,9 @@ class RegistrationsController < ApplicationController
   end
   
 def update
-    @event = Event.find(params[:event_id])
-    @user = User.find(params[:user_id])
     @registration = Registration.find(params[:id])
+    @event = @registration.event
+    @user = @event.user
     
     if !params[:registration][:answers_attributes].blank?
       # params auseinandernehmen (type separieren und options einspeissen)
@@ -175,7 +191,7 @@ def update
     
     respond_to do |format|
       if @registration.update_attributes(params[:registration])    
-        format.html { redirect_to user_event_registration_path(@user, @event, @registration), notice: 'Aenderungen erfolgreich eingetragen.' }
+        format.html { redirect_to user_event_registration_path(@user, @event, @registration, :mail => @registration.email), notice: 'Aenderungen erfolgreich eingetragen.' }
       else
         format.html { render action: "edit" }
       end
@@ -183,11 +199,19 @@ def update
   end
   
   def destroy
-    if User.exists?(params[:user_id]) && Event.exists?(params[:event_id]) && Registration.exists?(params[:id])
-      @event = Event.find(params[:event_id])
-      @user = User.find(params[:user_id])
-      registration = Registration.find(params[:id])
-      registrations = @event.registrations
+    # prüfen, ob emailadresse zur registration-id passt
+    if Registration.exists?(params[:id])
+      if Registration.find(params[:id]) == Registration.find_by_email(params[:mail])
+        registration = Registration.find(params[:id])
+      end
+    end
+    
+    if User.exists?(params[:user_id]) && Event.exists?(params[:event_id]) && registration
+      #TODO hier andere abfrage!! 
+      #passen user und event mit den datenbankangaben der registration zusammen?
+      @event = registration.event
+      @user = @event.user
+
         # email fuer infomail speichern
       email = registration.email 
       
@@ -199,7 +223,7 @@ def update
       
         # Information an Nachruecker 
         # (position im array: max_registration_count-1, da durch destroy das array kleiner wird!)
-      if registrations[@event.max_registration_count-1] != nil &&  @event.max_registration_count != -1 
+      if @registrations[@event.max_registration_count-1] != nil &&  @event.max_registration_count != -1 
         Notifier.registration_move_up(registrations[@event.max_registration_count-1]).deliver
       end
         # Abmeldebestaetigung

@@ -31,7 +31,7 @@
 	  				<td><%= a.input %></td>
 	  			<%end %>
 	  		<% end %>
-	  		<td><%= link_to 'Anmeldung löschen', user_event_registration_path(r.event.user, r.event, r), 
+	  		<td><%= link_to 'Anmeldung löschen', user_event_registration_path(r.event.user, r.event, r, :mail => r.email), 
 							confirm: "Anmeldung wirklich löschen? \nACHTUNG: Alle Daten sind dann weg!", 
 							method: :delete, remote: true,
 	    					:class => "btn"%></td>

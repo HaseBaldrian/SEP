@@ -34,10 +34,10 @@
 </table>
 
 <div align="right">
-	<%= link_to 'Angaben ändern', edit_user_event_registration_path(@user, @event, @registration), 
+	<%= link_to 'Angaben ändern', edit_user_event_registration_path(@user, @event, @registration, :mail => @registration.email), 
 							:class => "btn" %>
 	
-	<%= link_to 'Abmelden', user_event_registration_path(@user, @event, @registration), 
+	<%= link_to 'Abmelden', user_event_registration_path(@user, @event, @registration, :mail => @registration.email), 
 							confirm: "Wollen Sie sich wirklich abmelden? \n\nACHTUNG: All Ihre Daten werden dabei gelöscht, bei Veranstaltungen mit beschränkter Teilnehmerzahl ist eine Neuanmeldung unter Umständen nicht möglich!", 
 	    					method: :delete,
 	    					:class => "btn btn-danger" %>

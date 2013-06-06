@@ -4,7 +4,7 @@ soeben ist Ihre Anmeldung zur Veranstaltung <%= @event.title %> bei uns eingegan
 
 Ihre Anmeldedaten können Sie unter folgendem Link weiterhin erreichen: 
 
-<%= url_for :controller => :registrations, :action => :show, :user_id => @user.id, :event_id => @event.id, :id => @registration.id, :only_path => false%>
+<%= url_for :controller => :registrations, :action => :show, :user_id => @user.id, :event_id => @event.id, :id => @registration.id, :mail => @registration.email, :only_path => false%>
 
 Dort können Sie Ihre Angaben auch nochmals ändern oder sich abmelden. 
 
