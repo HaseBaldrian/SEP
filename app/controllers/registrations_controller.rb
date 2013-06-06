@@ -110,7 +110,7 @@ class RegistrationsController < ApplicationController
    end
     
     respond_to do |format|
-      unless @user # falls also fehler in der adresse, dann wurde @user nicht initialisiert
+      unless @registration # falls also fehler in der adresse, dann wurde @registration nicht initialisiert
         format.html { render :status => 404, :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found }
       else
         format.html
@@ -154,7 +154,7 @@ class RegistrationsController < ApplicationController
     end   
     
     respond_to do |format|
-      unless @user # falls also fehler in der adresse, dann wurde @user nicht initialisiert
+      unless @registration # falls also fehler in der adresse, dann wurde @registration nicht initialisiert
         format.html { render :status => 404, :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found }
       else
         format.html
