@@ -97,9 +97,7 @@ class RegistrationsController < ApplicationController
       end
     end
     
-    if User.exists?(params[:user_id]) && Event.exists?(params[:event_id]) && @registration
-      #TODO hier andere abfrage!! 
-      #passen user und event mit den datenbankangaben der registration zusammen?
+    if @registration # auf die prüfung von user/event wird verzichtet
       @event = @registration.event
       @user = @event.user
       
@@ -144,9 +142,7 @@ class RegistrationsController < ApplicationController
       end
     end
     
-    if User.exists?(params[:user_id]) && Event.exists?(params[:event_id]) && @registration
-      #TODO hier andere abfrage!! 
-      #passen user und event mit den datenbankangaben der registration zusammen?
+    if @registration # auf die prüfung von user/event wird verzichtet
       @event = @registration.event
       @user = @event.user
       
@@ -206,9 +202,7 @@ def update
       end
     end
     
-    if User.exists?(params[:user_id]) && Event.exists?(params[:event_id]) && registration
-      #TODO hier andere abfrage!! 
-      #passen user und event mit den datenbankangaben der registration zusammen?
+    if registration # auf die prüfung von user/event wird verzichtet
       @event = registration.event
       @user = @event.user
 
