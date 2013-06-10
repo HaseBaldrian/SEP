@@ -12,7 +12,7 @@ class RegistrationsController < ApplicationController
       @event = Event.find(params[:event_id]) 
     end
     
-    # falls Event gefunden wird, also nicht 404
+    # falls Event gefunden wird, also nicht 403
     if @event 
       @user = @event.user
       @questions = @event.questions.find(:all, :order => 'position')
