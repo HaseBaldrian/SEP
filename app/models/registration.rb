@@ -38,7 +38,11 @@ class Registration < ActiveRecord::Base
           inputs = ["\'" + registrations[i].email+ "\'"]
           answers = registrations[i].answers
           answers.each do |answer|
-            inputs << "\'" + answer.input+ "\'"
+            if answer.input.nil?
+              inputs << "\'" + "\'"
+            else
+              inputs << "\'" + answer.input+ "\'"
+            end
           end        
           i+=1
           csv << inputs
