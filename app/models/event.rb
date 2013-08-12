@@ -27,6 +27,7 @@ class Event < ActiveRecord::Base
   
   def link_matching
     self.link = self.title.tr(' ','_')
+    self.link = self.title.tr('ä', 'ae')
     self.link = self.link.downcase
   end
   
