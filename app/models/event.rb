@@ -32,7 +32,6 @@ class Event < ActiveRecord::Base
     self.link = self.link.tr('ü','ue') 
     self.link = self.link.tr('ß','ss') 
     self.link = self.link.downcase
-    
   end
   
   #Kurzlink /anmeldung ist hier hardcodiert.
