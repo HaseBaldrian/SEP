@@ -21,9 +21,9 @@ class Registration < ActiveRecord::Base
   
   def self.to_csv registrations
     unless registrations.empty?
-      firstline = ["EMAIL"]
+      firstline = ["email"]
         registrations.first.answers.each do |answer|
-          firstline << answer.question.question.upcase
+          firstline << answer.question.question
         end
       
       CSV.generate do |csv|
