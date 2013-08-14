@@ -41,7 +41,7 @@ class Registration < ActiveRecord::Base
             if answer.input.nil?
               inputs << "\'" + "\'"
             else
-              inputs << "\'" + answer.input+ "\'"
+              inputs << "\'" + answer.input.tr("\n", " ") + "\'"
             end
           end        
           i+=1
