@@ -29,10 +29,10 @@ class Event < ActiveRecord::Base
   
   def link_matching
     self.link = self.title.tr(' ','_')
-    self.link = self.title.tr('ä', 'ae')
-    self.link = self.title.tr('ö', 'oe')
-    self.link = self.title.tr('ü', 'ue')
-    self.link = self.title.tr('ß', 'ss')
+    self.link = self.link.tr('ä', 'ae')
+    self.link = self.link.tr('ö', 'oe')
+    self.link = self.link.tr('ü', 'ue')
+    self.link = self.link.tr('ß', 'ss')
     self.link = self.link.downcase
   end
   
