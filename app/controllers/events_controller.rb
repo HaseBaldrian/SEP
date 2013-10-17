@@ -104,7 +104,7 @@ class EventsController < ApplicationController
     @question_types = []
     
     @pattern_questions.each do |pq|
-        @q = @event.questions.build(:question => pq.question, :position => pq.position, :option1 => pq.option1, :option2 => pq.option2, :options => pq.options)
+        @q = @event.questions.build(:question => pq.question, :position => pq.position, :options => pq.options)
         @question_types[pq.position] = pq.type
     end
     
@@ -211,7 +211,7 @@ class EventsController < ApplicationController
     @question_types = []
     
     @pattern_questions.each do |pq|
-        @q = @event.questions.build(:question => pq.question, :position => pq.position, :option1 => pq.option1, :option2 => pq.option2, :options => pq.options)
+        @q = @event.questions.build(:question => pq.question, :position => pq.position, :options => pq.options)
         @question_types[pq.position] = pq.type
     end
 
