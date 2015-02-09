@@ -92,7 +92,7 @@ class RegistrationsController < ApplicationController
   def show  
     # prüfen, ob emailadresse zur registration-id passt
     if Registration.exists?(params[:id])
-      if Registration.find(params[:id]) == Registration.find_by_email(params[:mail])
+      if Registration.find(params[:id]).email == params[:mail]
         @registration = Registration.find(params[:id])
       end
     end
