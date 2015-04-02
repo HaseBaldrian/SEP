@@ -2,7 +2,7 @@ set :application, "anmeldesystem"
 
 set :scm, :git
 set :scm_username, "git"
-set :repository,  "#{scm_username}@vmhub1.informatik.tu-muenchen.de:anmeldesystem.git"
+set :repository,  "#{scm_username}@vmhub1.informatik.tu-muenchen.de:/var/git/anmeldesystem.git"
 set :branch, "deploy"
 set :deploy_via, :remote_cache
 

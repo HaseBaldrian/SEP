@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i
   validates :email, :presence => true, :uniqueness => true, :format => EMAIL_REGEX 
   
-  has_many :events
+  has_many :events, :dependent => :destroy
 
   def User.authenticate(name, password)
     if user = find_by_name(name)
