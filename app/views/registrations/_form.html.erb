@@ -13,7 +13,7 @@
 
 	<table class="table table-striped">
 		<tr>
-			<td class="span7"><%= f.label :email, "Email" %></td>
+			<td class="span7"><%= f.label :email, "E-Mail" %></td>
 			<td><%= f.text_field :email, :class => "span12" %></td>
 		</tr>
   
@@ -42,7 +42,7 @@
 						<%= a.radio_button :input, opt %>
 					<% end %>
 					
-					<%= a.label opt, :value => opt, :style => "display:inline" %><br />
+					<%=opt%><br />
 				<% end %>
 					<% end %>
 				</div>
@@ -66,9 +66,8 @@
 						<% end %>
 					<% else %>
 						<%= check_box_tag a.object.position.to_s+'_options[]', opt, false %>
-					<% end %>
-					
-					<%= a.label opt, :style => "display:inline" %><br />
+					<% end %>					
+					<%=opt%><br />
 				<% end %>
 				</div>
 	 		 </td>		
