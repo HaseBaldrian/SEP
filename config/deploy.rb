@@ -6,7 +6,7 @@ set :repository,  "#{scm_username}@vmhub1.informatik.tu-muenchen.de:anmeldesyste
 set :branch, "deploy"
 set :deploy_via, :remote_cache
 
-server "vmhub1.informatik.tu-muenchen.de", :app, :web, :db, :primary => true
+server "vmhub1.informatik.tu-muenchen.de", :app, :web, :db, :primary => true, ssh_options: {config: false}
 
 set :user, 'administrator'
 set :web_user, 'www-data'
