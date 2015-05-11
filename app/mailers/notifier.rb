@@ -20,25 +20,25 @@ class Notifier < ActionMailer::Base
     @registration = registration
     @event = registration.event
     @user = @event.user
-    mail :to => registration.email, :subject => "Anmeldung erfolgreich"
+    mail :to => registration.email, :reply_to => @user.email, :subject => "Anmeldung erfolgreich"
   end
   
   def registration_received_waitlist registration
     @registration = registration
     @event = registration.event
     @user = @event.user
-    mail :to => registration.email, :subject => "Anmeldung auf Warteliste"
+    mail :to => registration.email, :reply_to => @user.email, :subject => "Anmeldung auf Warteliste"
   end
   
   def registration_cancelled event, email
     @event = event
-    mail :to => email, :subject => "Abmeldung erfolgreich"
+    mail :to => email, :reply_to => @user.email, :subject => "Abmeldung erfolgreich"
   end
   
   def registration_move_up registration
     @registration = registration
     @event = registration.event
     @user = @event.user
-    mail :to => registration.email, :subject => "Nachrueckplatz erhalten"
+    mail :to => registration.email, :reply_to => @user.email, :subject => "Nachrueckplatz erhalten"
   end
 end
