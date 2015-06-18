@@ -137,7 +137,7 @@ class RegistrationsController < ApplicationController
   def edit
     # prüfen, ob emailadresse zur registration-id passt
     if Registration.exists?(params[:id])
-      if Registration.find(params[:id]) == Registration.find_by_email(params[:mail])
+      if Registration.find(params[:id]).email == params[:mail]
         @registration = Registration.find(params[:id])
       end
     end
@@ -197,7 +197,7 @@ def update
   def destroy
     # prüfen, ob emailadresse zur registration-id passt
     if Registration.exists?(params[:id])
-      if Registration.find(params[:id]) == Registration.find_by_email(params[:mail])
+      if Registration.find(params[:id]).email == params[:mail]
         registration = Registration.find(params[:id])
       end
     end
@@ -223,6 +223,8 @@ def update
         # Abmeldebestaetigung
       Notifier.registration_cancelled(@event,email).deliver
     end
+
+    @registrations = @event.registrations.all
     
     respond_to do |format|
       unless @user # falls also fehler in der adresse, dann wurde @user nicht initialisiert
