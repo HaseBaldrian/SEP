@@ -217,7 +217,7 @@ def update
       
         # Information an Nachruecker 
         # (position im array: max_registration_count-1, da durch destroy das array kleiner wird!)
-      if @registrations[@event.max_registration_count-1] != nil &&  @event.max_registration_count != -1 
+      if @event.max_registration_count != -1 && @registrations[@event.max_registration_count-1] != nil
         Notifier.registration_move_up(@registrations[@event.max_registration_count-1]).deliver
       end
         # Abmeldebestaetigung
