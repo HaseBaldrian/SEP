@@ -57,10 +57,7 @@
 		 	 
 		<% if @question_types[q.object.position] == "BoolQuestion" %>
 			<div class="field">
-				<%= q.hidden_field :option1 %>
-		 	</div>
-			<div class="field">
-				<%= q.hidden_field :option2 %>
+				<%= q.hidden_field :options %>
 		 	</div>
 		 	<div class="field">
 				<%= q.hidden_field :type, :value => "BoolQuestion" %>
